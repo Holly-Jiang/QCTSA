@@ -5,6 +5,7 @@ import time
 from base.Gate import Gate
 # from processing import processingle
 # from complete import completeSingle
+from complete import completeSingle
 from processing import processingle
 from qct_tools.circuit_preprocess import get_initial_gql
 from qct_tools.qct import QCT
@@ -37,11 +38,11 @@ if len(sys.argv) == 7:
         sys.exit(-1)
     if sys.argv[1] == 'connect':
         out_file += 'connect'
-        # completeSingle(filename, type, ini_mapping_path)
+        completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'degree':
         ini_mapping_path = "degree_ini_mapping_q20"
         out_file += 'degree'
-        # completeSingle(filename, type, ini_mapping_path)
+        completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'ga':
         ini_mapping_path = 'optm_ini'
         out_file += 'ga'
@@ -67,7 +68,7 @@ if len(sys.argv) == 7:
 
     po = open(outpath, "a+")
     pathUtil = PathUtil(20)
-    graph = pathUtil.build_graph_QX20()
+    graph = pathUtil.build_graph_Sycamore()
     dist = pathUtil.build_dist_table_tabu(graph.graph)
     ss = filename
     min_swaps = 99999999
