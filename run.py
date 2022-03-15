@@ -175,11 +175,6 @@ if len(sys.argv) == 11:
                                                              min_index, fileResult.ngates, min_files.ngates,
                                                              len(min_files.layers), min_swaps*3, forw, delta,
                                                              min_time))
-                # if sys.argv[10].__eq__('sycamore'):
-                #     po.write('%s %d %d %d %d %d %lf %lf %f\n' % (prefix,
-                #                                                  min_index, fileResult.ngates, min_files.ngates,
-                #                                                  len(min_files.layers), min_swaps*9, forw, delta,
-                #                                                  min_time))
 
 
                 # print(
