@@ -38,11 +38,11 @@ if len(sys.argv) == 7:
         sys.exit(-1)
     if sys.argv[1] == 'connect':
         out_file += 'connect'
-        # completeSingle(filename, type, ini_mapping_path, 'sycamore')
+        completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'degree':
         ini_mapping_path = "degree_ini_mapping_q20"
         out_file += 'degree'
-        # completeSingle(filename, type, ini_mapping_path, 'sycamore')
+        completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'ga':
         ini_mapping_path = 'optm_ini'
         out_file += 'ga'
@@ -105,8 +105,6 @@ if len(sys.argv) == 7:
         qubits = initial_mapping.qlist[i].copy()
         qct = QCT()
         physicalcircuit =[]
-        if i!=54:
-            continue
         OW = qct.originalSearch(layers_original, forw, delta, ss, graph, dist, locations, qubits, i,
                                 type, sys.argv[6], out_file, 'sycamore')
         if type >-1 :
@@ -144,7 +142,7 @@ if len(sys.argv) == 7:
 
     in_end = time.time()
     min_time = in_end - in_start
-    revisit='results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[6],prefix, out_file, ss,min_index)
+    revisit='results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[6],prefix, out_file, ss, min_index)
 
     processingle(revisit,54)
     min_files = FileUtils.readQasm(revisit, 54)

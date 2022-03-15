@@ -85,7 +85,7 @@ def get_initial_gql(filename,type,inipath):
             results.qlist.append(logical_qubits)
             results.lolist.append(physical_qubits)
     else:
-        print('there no initial mapping')
+        print('there no initial mapping', gql_ini_path)
     return results
 
 

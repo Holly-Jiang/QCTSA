@@ -3,7 +3,7 @@ from queue import Queue
 from base.IniGraph import IniGraph
 
 
-def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
+def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping,system:str):
     max_core = []
     max_count = 0
     for key, value in mappingresult.items():
@@ -38,6 +38,8 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
                     treemap.pop(keys[0])
                     k = 0
                     for k in range(len(targetAdj[targetNode])):
+                        if system.__eq__('sycamore') and k==3:
+                            continue
                         if ((targetAdj[targetNode][k] != -1 or targetAdj[k][targetNode] != -1)) and not (k in mapkey):
                             mapkey[queryId] = k
                             break
@@ -49,7 +51,7 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
     return max_core
 
 
-def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list):
+def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list,system:str):
     max_core = []
     max_count = 0
     for key1, value1 in mappingresult.items():
@@ -76,6 +78,8 @@ def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list
                     if mapkey[m] != 99999:
                         nearId=mapkey[m]
                         for k in range(len(targetAdj[nearId])):
+                            if system.__eq__('sycamore') and k == 3:
+                                continue
                             if (not  k in mapkey) and targetAdj[nearId][k]!=-1:
                                 content = '%s-%s' % (targetgraph.nodes[targetAdj[nearId][k]].label, targetAdj[nearId][k])
                                 treemap.update({content: k})
@@ -93,12 +97,12 @@ def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list
 
 class MyVF2:
 
-    def dealData(self, graphset: list, querygraph: IniGraph, mappingresult: dict, type: int, mapping: list):
+    def dealData(self, graphset: list, querygraph: IniGraph, mappingresult: dict, type: int, mapping: list,system:str):
         res = []
         if type == 0:
             for targetgraph in graphset:
-                res = connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping)
+                res = connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping, system)
         else:
             for targetgraph in graphset:
-                res = degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping)
+                res = degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping, system)
         return res

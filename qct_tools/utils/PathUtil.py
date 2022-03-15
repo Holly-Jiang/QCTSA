@@ -34,7 +34,7 @@ class PathUtil:
                         successors.append(e.target)
                     if e.target == current and not (e.source in v) and not (e.source in successors):
                         successors.append(e.source)
-                successors = sorted(successors)
+                # successors = sorted(successors)
                 su = iter(successors)
                 for succ in su:
                     v2 = list(v)

@@ -61,7 +61,7 @@ def process(start,end, system):
         position=20
         if system.__eq__('sycamore'):
             position=54
-        gates = FileUtils.precessReadQasm(current_path, ss,position)
+        gates = FileUtils.precessReadQasm(current_path, ss , position)
         # print('processing the %d-th file:%s, consisting of %d gates.' % (k, ss, gates))
         # if gates < 10000:
         #     translate(current_path, ss, gates + 50)
@@ -83,7 +83,7 @@ def processingle(path,position):
     pass
 
 if __name__ == '__main__':
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         start_index = int(sys.argv[1])
         end_index = int(sys.argv[2])
         process(start_index, end_index, sys.argv[3])

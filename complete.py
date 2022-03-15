@@ -48,7 +48,7 @@ def completeSingle(file_name, type: int, out_path, system):
     vf2 = MyVF2()
     print('loading Done')
     for querygraph in queryset:
-        stateset = vf2.dealData(graphset, querygraph, mappingresult, type, mapping)
+        stateset = vf2.dealData(graphset, querygraph, mappingresult, type, mapping, system)
         for i in range(len(stateset)):
             res = [-1] * 20
             if system.__eq__('sycamore'):
@@ -66,11 +66,11 @@ def complete(type: int, out_path, system):
     graphpath = 'graphDB/%s.data'%(system)
     querypath = 'graphDB/ex2.my'
     outpath = 'graphDB/res_ex2.my'
-    files = os.listdir('pre_ini_qx20/')
     outinipath = 'graphDB/ini_map_GQL.my'
     mappingpath = ''
     bashcommand = 'shells/%s.sh'%(system)
-    # executeShellCommands(bashcommand)
+    executeShellCommands(bashcommand)
+    files = os.listdir('pre_ini_qx20/')
     for file_name in files:
         print(file_name)
         mappingpath = 'pre_ini_qx20/%s' % (file_name)
@@ -99,7 +99,7 @@ def complete(type: int, out_path, system):
         print('loading Done')
 
         for querygraph in queryset:
-            stateset = vf2.dealData(graphset, querygraph, mappingresult, type, mapping)
+            stateset = vf2.dealData(graphset, querygraph, mappingresult, type, mapping,system)
             for i in range(len(stateset)):
                 res = [-1] * 20
                 if system.__eq__('sycamore'):
