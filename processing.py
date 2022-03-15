@@ -50,7 +50,7 @@ def translate(path, ss, linecount):
     return
 
 
-def process(start,end):
+def process(start,end, system):
     path = 'data/'
     files = os.listdir(path)
     for k in range(start,end):
@@ -58,24 +58,27 @@ def process(start,end):
         current_path = 'data/%s' % (files[k])
         if os.path.isdir(current_path) or current_path.endswith('.zip'):
             continue
-        gates = FileUtils.precessReadQasm(current_path, ss)
-        print('processing the %d-th file:%s, consisting of %d gates.' % (k, ss, gates))
-        if gates < 10000:
-            translate(current_path, ss, gates + 50)
+        position=20
+        if system.__eq__('sycamore'):
+            position=54
+        gates = FileUtils.precessReadQasm(current_path, ss,position)
+        # print('processing the %d-th file:%s, consisting of %d gates.' % (k, ss, gates))
+        # if gates < 10000:
+        #     translate(current_path, ss, gates + 50)
     pass
 
 
-def processingle(path):
+def processingle(path,position):
     p = path.split('/')
     ss = p[len(p) - 1].split('.')[0]
     current_path = path
     if os.path.isdir(current_path) or current_path.endswith('.zip'):
         print('The path [%s] is invalid!' % path)
         sys.exit(-1)
-    gates = FileUtils.precessReadQasm(current_path, ss)
-    print('processing file:%s, consisting of %d gates.' % (ss, gates))
-    if gates < 10000:
-        translatesingle(current_path, ss, gates + 50)
+    FileUtils.precessReadQasm(current_path, ss, position)
+    # print('processing file:%s, consisting of %d gates.' % (ss, gates))
+    # if gates < 10000:
+    #     translatesingle(current_path, ss, gates + 50)
 
     pass
 
@@ -83,4 +86,4 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         start_index = int(sys.argv[1])
         end_index = int(sys.argv[2])
-        process(start_index, end_index)
+        process(start_index, end_index, sys.argv[3])

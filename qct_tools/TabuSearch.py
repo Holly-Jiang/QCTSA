@@ -41,15 +41,15 @@ class TabuSearch:
 
         return True
 
-    def run(self, initialSolution, type, delta):
+    def run(self, initialSolution, type, delta, system:str):
         bestSolution = initialSolution
         currentIteration = 0
         while not self.mustStop(currentIteration, bestSolution):
-            candidateNeighbors = list(bestSolution.getNeighbors(type,delta))
+            candidateNeighbors = list(bestSolution.getNeighbors(type,delta,system))
             solutionsInTabu = self.tabulist
             bestneighborfound = findBestNeighbor(candidateNeighbors, solutionsInTabu,type)
             if bestneighborfound == None:
-                neighbor = bestSolution.getNeighbors(type, delta)
+                neighbor = bestSolution.getNeighbors(type, delta,system)
                 if neighbor == None or len(neighbor) <= 0:
                     break
                 else:

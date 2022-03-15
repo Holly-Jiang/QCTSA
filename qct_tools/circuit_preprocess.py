@@ -60,20 +60,26 @@ def get_distance_matrix(coupling_graph: Graph) -> np.matrix:
 def get_initial_gql(filename,type,inipath):
     gql_ini_path = "%s/%s" % (inipath, filename)
     results = FileResult()
+    position=20
+    if type.__eq__('sycamore'):
+        position=54
     if os.path.exists(gql_ini_path):
         file = open(gql_ini_path, 'r')
         for line in file:
             if line == '':
                 break
-            physical_qubits = [-1] * 20
+
+            physical_qubits = [-1] * position
             logical_qubits = list(physical_qubits)
             line = line.strip('\n')
             line=line.strip()
             line = line[1:len(line) - 1]
             strlist = line.split(',')
+            if type.__eq__('sycamore') and int(strlist[3]) != -1:
+                continue
             for x in range(len(strlist)):
                 x1 = int(strlist[x])
-                if x1 != 20:
+                if x1 != -1:
                     logical_qubits[x] = x1
                     physical_qubits[x1] = x
             results.qlist.append(logical_qubits)

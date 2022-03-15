@@ -12,6 +12,8 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
     for key, value in mappingresult.items():
         if max_count == value:
             mapkey = mapping[int(key)]
+            if mapkey.__contains__(3):
+                continue
             queue = Queue()
             for i in range(len(mapkey)):
                 if mapkey[i] == 99999:
@@ -47,7 +49,7 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
     return max_core
 
 
-def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
+def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list):
     max_core = []
     max_count = 0
     for key1, value1 in mappingresult.items():
@@ -56,6 +58,8 @@ def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping):
     for key, value in mappingresult.items():
         if max_count == value:
             mapkey = mapping[int(key)]
+            if mapkey.__contains__(3):
+                continue
             queue = []
             for i in range(len(mapkey)):
                 if mapkey[i] == 99999:

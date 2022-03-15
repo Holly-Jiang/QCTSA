@@ -14,8 +14,8 @@ def save_result(path, msg):
 
 
 class FileUtils:
-    positions = 20
-    nqubits = 20
+    # positions = 20
+    # nqubits = 20
     @classmethod
     def loadDataSetFromFile(self, path, filename):
         result = []
@@ -77,7 +77,7 @@ class FileUtils:
         pass
 
     @classmethod
-    def precessReadQasm(self, path, filename) -> int:
+    def precessReadQasm(self, path, filename,position:int) -> int:
         layers = []
         ngates = 0
         n2gates = 0
@@ -112,7 +112,7 @@ class FileUtils:
             sys.exit(-1)
 
         last_layer = []
-        for i in range(self.positions):
+        for i in range(position):
             last_layer.append(-1)
         while True:
             line = f.readline().strip()
@@ -249,7 +249,7 @@ class FileUtils:
         return result
 
     @classmethod
-    def readQasm(self, path):
+    def readQasm(self, path, position:int):
         layers = []
         ngates = 0
         n2gates = 0
@@ -285,7 +285,7 @@ class FileUtils:
             sys.exit(-1)
 
         last_layer = []
-        for i in range(self.positions):
+        for i in range(position):
             last_layer.append(-1)
         while True:
             line = f.readline().strip()
@@ -312,6 +312,18 @@ class FileUtils:
                     g.control = -1
                     g.target = int(str[1][2:len(str[1]) - 2])
                     g.type = 'rz'
+                    g.angle = angle
+                elif str[0].startswith('ry'):
+                    angle = float(str[0][3:len(str[0]) - 1])
+                    g.control = -1
+                    g.target = int(str[1][2:len(str[1]) - 2])
+                    g.type = 'ry'
+                    g.angle = angle
+                elif str[0].startswith('rx'):
+                    angle = float(str[0][3:len(str[0]) - 1])
+                    g.control = -1
+                    g.target = int(str[1][2:len(str[1]) - 2])
+                    g.type = 'rx'
                     g.angle = angle
                 else:
                     g.type = str[0]

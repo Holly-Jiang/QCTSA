@@ -261,7 +261,7 @@ def generateCharts(file):
     out=list()
     for k in it:
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' %k)
+        fileResult = fu.readQasm('data/%s.qasm' %k,20)
         l = fileResult.n2gates
         o1=list()
         if  mapu.get(k)[5]!=0:
@@ -287,7 +287,7 @@ def generateSabreCharts(file):
     out=list()
     for k in it:
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' %k)
+        fileResult = fu.readQasm('data/%s.qasm' %k, 20)
         l = fileResult.n2gates
         o1=list()
         if  mapu.get(k)[1]!=0:
@@ -314,7 +314,7 @@ def generatefidslCharts(file):
     out=list()
     for k in it:
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' %k)
+        fileResult = fu.readQasm('data/%s.qasm' %k, 20)
         l = fileResult.n2gates
         o1=list()
         if  mapu.get(k)[1]!=0:
@@ -343,7 +343,7 @@ def generateGACharts(file):
     count=0
     for k in it:
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' %k)
+        fileResult = fu.readQasm('data/%s.qasm' %k, 20)
         l = fileResult.n2gates
         o1=list()
         if mapu.get(k)[3][3] == 9999999:
@@ -795,7 +795,7 @@ def compareSABRE_TSA(sabrepath, tsapath, type):
         v1list = tsamap.get(k)
         gate_gql_all += v1list[2]
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm'%k)
+        fileResult = fu.readQasm('data/%s.qasm'%k,20)
         l = fileResult.n2gates
         if type == 'small':
             if l > 100:
@@ -861,7 +861,7 @@ def compareFiDSL_TSA(fidlspath, tsapath, type):
     for k in it:
         v1list = tsamap.get(k)
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' % k)
+        fileResult = fu.readQasm('data/%s.qasm' % k,20)
         l = fileResult.n2gates
         if type == 'small':
             if l > 100:
@@ -923,7 +923,7 @@ def comparenumCCA_TSA(ccapath, tsapath, type='all'):
     for k in it:
         v1list = tsamap.get(k)
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' % k)
+        fileResult = fu.readQasm('data/%s.qasm' % k,20)
         l = fileResult.n2gates
         if type == 'small':
             if l > 100:

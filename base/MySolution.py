@@ -97,6 +97,46 @@ def addQX20SwapGates(e: Edge, graph: set, circuits: list):
     # circuits.append(gg)
     # print(gg.type,gg.control,gg.target)
 
+def addSycamoreSwapGates(e: Edge, graph: set, circuits: list):
+    ry_1 = Gate()
+    ry_1.type = 'ry'
+    ry_1.target = e.target
+    ry_1.angle=-90
+
+    ry1 = Gate()
+    ry1.type = 'ry'
+    ry1.target = e.target
+    ry1.angle=90
+
+    cz = Gate()
+    cz.type = 'cz'
+    cz.control = e.source
+    cz.target = e.target
+
+    ry_2 = Gate()
+    ry_2.type = 'ry'
+    ry_2.target = e.target
+    ry_2.angle=-90.0
+
+    ry2 = Gate()
+    ry2.type = 'ry'
+    ry2.angle=90.0
+    ry2.target = e.target
+    gg = Gate()
+    gg.control = e.source
+    gg.target = e.target
+    gg.type = 'SWP'
+    circuits.append(ry_2)
+    circuits.append(cz)
+    circuits.append(ry_1)
+    circuits.append(ry2)
+    circuits.append(cz)
+    circuits.append(ry1)
+    circuits.append(ry_2)
+    circuits.append(cz)
+    circuits.append(ry2)
+    # circuits.append(gg)
+    # print(gg.type,gg.control,gg.target)
 
 # circuits.append(gg)
 
@@ -165,16 +205,16 @@ class MySolution(Solution):
         self.swapped_edge = Edge()
 
 
-    def getNeighbors(self, type, delta):
+    def getNeighbors(self, type, delta, system:str):
         result = self.computeNeighbor(graph=self.graph, parent=self, dist=self.dist, qubits=self.qubits,
                                       locations=self.locations, currentLayers1=self.currentLayers,
-                                      nextLayers_1=self.nextLayers_1, type=type, delta=delta)
+                                      nextLayers_1=self.nextLayers_1, type=type, delta=delta, system=system)
         self.neighbors = result.solutions
         return self.neighbors
 
     @staticmethod
     def computeNeighbor(graph: set, parent: Solution, dist: list, qubits: list, locations: list,
-                        currentLayers1: list, nextLayers_1: list, type: int, delta: float) -> NeighborResult:
+                        currentLayers1: list, nextLayers_1: list, type: int, delta: float, system:str) -> NeighborResult:
         curr_solved_gates = []
         result = NeighborResult()
         solutions = []
@@ -234,7 +274,10 @@ class MySolution(Solution):
                         # print(newLocations)
                         s.swaps.append(paths[k][j])
                         s.swapped_edge = paths[k][j]
-                        addQX20SwapGates(paths[k][j], graph, s.circuits)
+                        if system.__eq__('sycamore'):
+                            addQX20SwapGates(paths[k][j], graph, s.circuits)
+                        else:
+                            addQX20SwapGates(paths[k][j], graph, s.circuits)
                         if type == 0:
                             #num cca
                             s.score = computeValue(dist, newLocations, currentLayers, nextLayers_1, delta)

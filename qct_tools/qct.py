@@ -16,7 +16,7 @@ from qct_tools.utils.FileUtils import FileUtils
 class QCT:
     @classmethod
     def improveSearch(self, layers, forw, delta, file_name, graph, dist, tem_locations: list, tem_qubits: list, x,
-                      type:int,direc,out_file) -> WriteResult:
+                      type:int,direc,out_file,system:str) -> WriteResult:
         iniWriter = WriteResult()
         locations = tem_locations.copy()
         qubits = tem_qubits.copy()
@@ -26,10 +26,16 @@ class QCT:
                                                                         out_file,
                                                                         file_name, x)
         resultwriter = open(tabuResultPath, 'w+')
-        resultwriter.write('OPENQASM 2.0;\n'
-                           'include \"qelib1.inc\";\n'
-                           'qreg q[16];\n'
-                           'creg c[16];\n')
+        if system.__eq__('sycamore'):
+            resultwriter.write('OPENQASM 2.0;\n'
+                               'include \"qelib1.inc\";\n'
+                               'qreg q[53];\n'
+                               'creg c[53];\n')
+        else:
+            resultwriter.write('OPENQASM 2.0;\n'
+                               'include \"qelib1.inc\";\n'
+                               'qreg q[16];\n'
+                               'creg c[16];\n')
         ts = TabuSearch(list(), maxIterations=500)
         for d in range(len(layers)):
             all_gates = []
@@ -54,14 +60,14 @@ class QCT:
             initialSolution = MySolution(graph, dist, locations.copy(), qubits.copy(), currentLayers, nextlayers_1)
             for all_g in all_gates:
                 initialSolution.circuits.append(all_g)
-            neighborResult = self.buildInstance(graph= graph,currentLayers=currentLayers, dist= dist, qubits=qubits, locations=locations, nextLayers_1=nextlayers_1, parent=initialSolution,type=type,delta=delta)
+            neighborResult = self.buildInstance(graph= graph,currentLayers=currentLayers, dist= dist, qubits=qubits, locations=locations, nextLayers_1=nextlayers_1, parent=initialSolution,type=type,delta=delta,system=system)
             solutions = neighborResult.solutions
             if len(solutions) > 0:
                 tem_swap = 9999999
                 returnValue = initialSolution
                 for i in range(len(solutions)):
                     initialSolution = solutions[i]
-                    tempValue = ts.run(initialSolution, type, delta)
+                    tempValue = ts.run(initialSolution, type, delta,system)
                     if tempValue == None:
                         self.writeCircuits(initialSolution.circuits, resultwriter)
                         print('no candidate set')
@@ -88,7 +94,7 @@ class QCT:
         pass
     @classmethod
     def originalSearch(self, layers, forw, delta, file_name, graph, dist, tem_locations: list, tem_qubits: list, x,
-                       type:int,direc,out_file) -> WriteResult:
+                       type:int,direc,out_file,system:str) -> WriteResult:
         iniWriter = WriteResult()
         locations = tem_locations.copy()
         qubits = tem_qubits.copy()
@@ -101,7 +107,13 @@ class QCT:
                                                                          out_file,
                                                                          file_name,x)
         resultwriter = open(tabuResultPath, 'w+')
-        resultwriter.write('OPENQASM 2.0;\n'
+        if system.__eq__('sycamore'):
+            resultwriter.write('OPENQASM 2.0;\n'
+                               'include \"qelib1.inc\";\n'
+                               'qreg q[53];\n'
+                               'creg c[53];\n')
+        else:
+            resultwriter.write('OPENQASM 2.0;\n'
                            'include \"qelib1.inc\";\n'
                            'qreg q[16];\n'
                            'creg c[16];\n')
@@ -110,12 +122,14 @@ class QCT:
             # print(d,'=================================================')
             all_gates = []
             currentLayers = []
-            physicalcircuit=[]
             for s in range(len(layers[d])):
                 if layers[d][s].control != -1:
                     currentLayers.append(layers[d][s])
                 else:
-                    g = Gate(layers[d][s])
+                    g = Gate()
+                    g.control=layers[d][s].control
+                    g.type=layers[d][s].type
+                    g.angle=layers[d][s].angle
                     g.target = locations[g.target]
                     all_gates.append(g)
 
@@ -134,7 +148,7 @@ class QCT:
             initialSolution = MySolution(graph, dist, locations.copy(), qubits.copy(), currentLayers, nextlayers_1)
             for all_g in all_gates:
                 initialSolution.circuits.append(all_g)
-            neighborResult = self.buildInstance(graph= graph,currentLayers=currentLayers, dist= dist, qubits=qubits, locations=locations, nextLayers_1=nextlayers_1, parent=initialSolution,type=type,delta=delta)
+            neighborResult = self.buildInstance(graph= graph,currentLayers=currentLayers, dist= dist, qubits=qubits, locations=locations, nextLayers_1=nextlayers_1, parent=initialSolution,type=type,delta=delta,system=system)
             solutions = neighborResult.solutions
             if len(solutions) > 0:
                 initialSolution = solutions[0]
@@ -143,7 +157,7 @@ class QCT:
                 self.writeCircuits(all_gates=neighborResult.curr_solved_gates, fw= resultwriter)
 
                 continue
-            returnValue = ts.run(initialSolution, type, delta)
+            returnValue = ts.run(initialSolution, type, delta,system)
             if returnValue == None:
                 self.writeCircuits(all_gates=initialSolution.circuits, fw=resultwriter)
                 print('no candidates')
@@ -170,8 +184,8 @@ class QCT:
     def writeCircuits(self, all_gates: list, fw):
         for i in all_gates:
             if i.control + 1 == 0:
-                if i.type == 'rz':
-                    content = '%s(%f) q[%d];\n'%(i.type,i.angle,i.target)
+                if i.type == 'rz' or i.type == 'rx' or i.type == 'ry':
+                    content = '%s(%.1f) q[%d];\n'%(i.type,i.angle,i.target)
                     fw.write(content)
                 else:
                     content = '%s q[%d];\n'%(i.type,i.target)
@@ -182,9 +196,9 @@ class QCT:
         fw.flush()
     @classmethod
     def buildInstance(self,graph, currentLayers, dist, qubits, locations, nextLayers_1, parent, type,
-                      delta) -> NeighborResult:
+                      delta,system) -> NeighborResult:
         neighborResult = MySolution.computeNeighbor(graph=graph, parent=parent, dist=dist,qubits= qubits, locations=locations, currentLayers1=currentLayers, nextLayers_1=nextLayers_1,
-                                                    type=type, delta=delta)
+                                                    type=type, delta=delta,system=system)
         solutions = neighborResult.solutions
         neighborResult.solutions = sorted(solutions, key=lambda s :(s.score, s.subscore))
         return neighborResult

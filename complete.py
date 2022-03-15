@@ -48,13 +48,11 @@ def completeSingle(file_name, type: int, out_path, system):
     vf2 = MyVF2()
     print('loading Done')
     for querygraph in queryset:
-        if querygraph.nodes.__contains__(3):
-            continue
         stateset = vf2.dealData(graphset, querygraph, mappingresult, type, mapping)
         for i in range(len(stateset)):
-            res = [20] * 20
+            res = [-1] * 20
             if system.__eq__('sycamore'):
-                res = [54] * 20
+                res = [-1] * 54
             for j in range(len(stateset[i])):
                 res[stateset[i][j]] = j
             iniwriter.write(str(res))
@@ -84,8 +82,7 @@ def complete(type: int, out_path, system):
         mapping = FileUtils.loadDataSetFromFile(mappingpath, 'mapping ')
         if len(mapping) <= 0:
             os.system(
-                'CISC/SubgraphComparing/build/matching/SubgraphMatching.out -d CISC/SubgraphComparing/test/sample_dataset/%s.graph -q pre_result/%s  -filter DPiso -order GQL -engine LFTJ -num 100\n' % ( system,
-                    file_name))
+                'CISC/SubgraphComparing/build/matching/SubgraphMatching.out -d CISC/SubgraphComparing/test/sample_dataset/%s.graph -q pre_result/%s  -filter DPiso -order GQL -engine LFTJ -num 100\n' % (system, file_name))
 
             mapping = FileUtils.loadDataSetFromFile(mappingpath, 'mapping ')
         maxMappingCount = 0
@@ -100,14 +97,13 @@ def complete(type: int, out_path, system):
                 maxMappingCount = m
         vf2 = MyVF2()
         print('loading Done')
+
         for querygraph in queryset:
-            if querygraph.nodes.__contains__(3):
-                continue
             stateset = vf2.dealData(graphset, querygraph, mappingresult, type, mapping)
             for i in range(len(stateset)):
-                res = [20] * 20
+                res = [-1] * 20
                 if system.__eq__('sycamore'):
-                    res = [54] * 20
+                    res = [-1] * 54
                 for j in range(len(stateset[i])):
                     res[stateset[i][j]] = j
                 iniwriter.write(str(res))
@@ -128,4 +124,4 @@ if __name__ == '__main__':
     else:
         print('please input the correct parameter [connect/degree]')
         sys.exit(-1)
-    complete(type, out_path, 'QX20')
+    complete(type, out_path, sys.argv[2])

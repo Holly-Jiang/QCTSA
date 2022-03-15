@@ -6,6 +6,26 @@ import math
 import os,sys
 
 # Press the green button in the gutter to run the script.
+def read_fidls_syc_files(path):
+    if path=='':
+        print('the path \'%s\' is not exist'%path)
+    map=dict()
+    f = open(path, "r")
+    while True:
+        line = f.readline().strip()
+        if line.startswith('****************************'):
+            line = f.readline()
+            break
+    while True:
+        line = f.readline().strip()
+        if (not line) or line.__eq__('')  or (not line.startswith('(')):
+            break
+        list1=list()
+        arr=line.split('(')[1].split(')')[0].split(',')
+        for i in range(2,len(arr)):
+                list1.append(float(arr[i]))
+        map['%s'%arr[1].strip()[1:len(arr[1])-2]]=list1
+    return map
 def read_tabu_files(path):
     if path=='':
         print('the path \'%s\' is not exist'%path)
@@ -979,7 +999,22 @@ def compareGA_TSA(gamap,tsamap):
     print("(GA-TSA_num)/GA: ", (tsagate-optmgate + 0.0) / optmgate)
 #evaldepth ./results/test/tsa_ccamindepth ./results/test/tsa_depthmindepth ./results/test/tsamindepth
 
+def  comparesycamore(tsapath,fidlspath):
+    tsa = read_tabu_files(tsapath)
+    fidls=read_fidls_syc_files(fidlspath)
+    it = fidls.keys()
+    count=0
+    for k in it:
+        if tsa.get(k)!=None:
+            count+=1
+            if fidls.get(k)[3]/3==tsa.get(k)[5]:
+                print(k,fidls.get(k)[3]/3-tsa.get(k)[5])
+    print(count)
+    pass
 if __name__ == '__main__':
+    tsapath='results/qct/smallnumccaconnect_forw_3.00_delta_0.20000'
+    fidlspath='E:\\github\\FiDLS-master\\FiDLS-master\\testRecord\\0924-sycamore_01y_top_B131_all__D_old_.txt'
+    comparesycamore(tsapath,fidlspath)
 
     if sys.argv[1].__eq__('best'):
         if sys.argv[2]!='':

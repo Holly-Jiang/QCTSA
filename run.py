@@ -9,7 +9,7 @@ from qct_tools.circuit_preprocess import get_initial_gql
 from qct_tools.utils.FileUtils import FileUtils
 from qct_tools.utils.PathUtil import PathUtil
 
-if len(sys.argv) == 10:
+if len(sys.argv) == 11:
     count = 0
     path = 'processed_data/'
     files = os.listdir(path)
@@ -69,8 +69,14 @@ if len(sys.argv) == 10:
             print("**********************************************")
             po = open(outpath, "w")
             print(forw, delta)
-            pathUtil = PathUtil(20)
-            graph = pathUtil.build_graph_QX20()
+            position=20
+            if sys.argv[10].__eq__('sycamore'):
+                position=54
+                pathUtil = PathUtil(position)
+                graph = pathUtil.build_graph_Sycamore()
+            else:
+                pathUtil = PathUtil(position)
+                graph = pathUtil.build_graph_QX20()
             dist = pathUtil.build_dist_table_tabu(graph.graph)
             count = 0
             print(len(files))
@@ -86,7 +92,7 @@ if len(sys.argv) == 10:
                 if os.path.isdir(current_path) or current_path.endswith('zip'):
                     continue
                 fu = FileUtils()
-                fileResult = fu.readQasm(path=current_path)
+                fileResult = fu.readQasm(path=current_path, position=position)
                 l = fileResult.n2gates
                 if SIZE == 'small':
                     if l >= 100:
@@ -110,7 +116,7 @@ if len(sys.argv) == 10:
                     layers_original.append(ori)
                     layers_improve.append(imp)
 
-                initial_mapping = get_initial_gql(ss, type, ini_mapping_path)
+                initial_mapping = get_initial_gql(ss, sys.argv[10], ini_mapping_path)
                 if len(initial_mapping.lolist) <= 0:
                     print('there no  initial mapping')
                     continue
@@ -122,10 +128,10 @@ if len(sys.argv) == 10:
 
                     qct = QCT()
                     OW = qct.originalSearch(layers_original, forw, delta, ss, graph, dist, locations, qubits, i,
-                                            type, sys.argv[4],out_file)
+                                            type, sys.argv[4],out_file,sys.argv[10])
                     if type >-1 :
                         IW = qct.improveSearch(layers_improve, forw, delta, ss, graph, dist, locations, qubits, i, type,
-                                               sys.argv[4],out_file)
+                                               sys.argv[4],out_file,sys.argv[10])
                         if OW != None and IW != None:
                             if (IW.min_swaps < OW.min_swaps):
                                 if (min_swaps > IW.min_swaps):
@@ -159,7 +165,7 @@ if len(sys.argv) == 10:
                 in_end = time.time()
                 min_time = in_end - in_start
                 revisit='results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[4],prefix, out_file,ss, min_index)
-                min_files = FileUtils.readQasm(revisit)
+                min_files = FileUtils.readQasm(revisit,position)
                 compath = '%s_%s_%d.qasm' % (out_file,ss, min_index)
                 os.system('find results/circuits/%s/*/%s_%s*.qasm ! -name %s -type f -exec rm -rf {} \;' % (
                     sys.argv[4], out_file,ss, compath))
@@ -169,10 +175,15 @@ if len(sys.argv) == 10:
                                                              min_index, fileResult.ngates, min_files.ngates,
                                                              len(min_files.layers), min_swaps*3, forw, delta,
                                                              min_time))
+                # if sys.argv[10].__eq__('sycamore'):
+                #     po.write('%s %d %d %d %d %d %lf %lf %f\n' % (prefix,
+                #                                                  min_index, fileResult.ngates, min_files.ngates,
+                #                                                  len(min_files.layers), min_swaps*9, forw, delta,
+                #                                                  min_time))
 
 
                 # print(
-                #     'the minimal initial mapping index: %d\nthe ini gates number: %d\nthe output circuit inserted %d SWAP gates\nthe total gates number: %d\nthe 2-qubit gates number: %d\nthe depth of generated circuit: %d\nthe cost time: %d,\n' % (
+                #     'the minimal initial mapping index: %d\nthe ini gates number: %d\nthe output circuit inserted %d CNOT gates\nthe total gates number: %d\nthe 2-qubit gates number: %d\nthe depth of generated circuit: %d\nthe cost time: %d,\n' % (
                 #         min_index, fileResult.ngates, min_swaps*3, min_files.ngates, min_files.n2gates, len(min_files.layers), min_time))
                 po.flush()
             end = time.time()

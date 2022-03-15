@@ -38,11 +38,11 @@ if len(sys.argv) == 7:
         sys.exit(-1)
     if sys.argv[1] == 'connect':
         out_file += 'connect'
-        completeSingle(filename, type, ini_mapping_path, 'sycamore')
+        # completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'degree':
         ini_mapping_path = "degree_ini_mapping_q20"
         out_file += 'degree'
-        completeSingle(filename, type, ini_mapping_path, 'sycamore')
+        # completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'ga':
         ini_mapping_path = 'optm_ini'
         out_file += 'ga'
@@ -67,7 +67,7 @@ if len(sys.argv) == 7:
     print('the output path: ', outpath)
 
     po = open(outpath, "a+")
-    pathUtil = PathUtil(20)
+    pathUtil = PathUtil(54)
     graph = pathUtil.build_graph_Sycamore()
     dist = pathUtil.build_dist_table_tabu(graph.graph)
     ss = filename
@@ -80,7 +80,7 @@ if len(sys.argv) == 7:
     if os.path.isdir(current_path) or current_path.endswith('zip'):
         sys.exit('the path [%s] is valid!' % sys.argv[5])
     fu = FileUtils()
-    fileResult = fu.readQasm(path=current_path)
+    fileResult = fu.readQasm(path=current_path, position=54)
     l = fileResult.n2gates
     prefix = ''
     print('the circuit: %s, consisting of %d 2-qubit gates' % ( ss, l))
@@ -95,7 +95,7 @@ if len(sys.argv) == 7:
         layers_original.append(ori)
         layers_improve.append(imp)
 
-    initial_mapping = get_initial_gql(ss, type, ini_mapping_path)
+    initial_mapping = get_initial_gql(ss, 'sycamore', ini_mapping_path)
     if len(initial_mapping.lolist) <= 0:
         print('there no  initial mapping')
         sys.exit(-1)
@@ -108,10 +108,10 @@ if len(sys.argv) == 7:
         if i!=54:
             continue
         OW = qct.originalSearch(layers_original, forw, delta, ss, graph, dist, locations, qubits, i,
-                                type, sys.argv[6], out_file)
+                                type, sys.argv[6], out_file, 'sycamore')
         if type >-1 :
             IW = qct.improveSearch(layers_improve, forw, delta, ss, graph, dist, locations, qubits, i, type,
-                                   sys.argv[6],out_file)
+                                   sys.argv[6],out_file, 'sycamore')
             if OW != None and IW != None:
                 if (IW.min_swaps < OW.min_swaps):
                     if (min_swaps > IW.min_swaps):
@@ -146,8 +146,8 @@ if len(sys.argv) == 7:
     min_time = in_end - in_start
     revisit='results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[6],prefix, out_file, ss,min_index)
 
-    processingle(revisit)
-    min_files = FileUtils.readQasm(revisit)
+    processingle(revisit,54)
+    min_files = FileUtils.readQasm(revisit, 54)
     po.write('%s\n' %(ss))
     po.write('%s %d %d %d %d %d %lf %lf %f\n' % (prefix,
                                          min_index, fileResult.ngates, min_files.ngates, len(min_files.layers),
@@ -158,7 +158,7 @@ if len(sys.argv) == 7:
         sys.argv[6],  out_file, ss, compath))
     print(
         'the minimal initial mapping index: %d\nthe ini gates number: %d\nthe output circuit inserted %d SWAP gates\nthe total gates number: %d\nthe 2-qubit gates number: %d\nthe depth of generated circuit: %d\nthe cost time: %d\n' % (
-            min_index, fileResult.ngates, min_swaps*3,min_files.ngates, min_files.n2gates, len(min_files.layers), min_time))
+            min_index, fileResult.ngates, min_swaps,min_files.ngates, min_files.n2gates, len(min_files.layers), min_time))
     po.flush()
     end = time.time()
     po.write('time:%f\n' % (end - start))

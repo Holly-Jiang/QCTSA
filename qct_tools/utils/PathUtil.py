@@ -394,14 +394,14 @@ class PathUtil:
                 graph.add(e1)
                 graph.add(e2)
         return reslut
-p = PathUtil(54)
-syc = p.build_graph_Sycamore()
-syc.graph = sorted(syc.graph, key=lambda k: k.source)
-print('t 54 %s' % (len(syc.graph)))
-for i in range(54):
-    print('v %s 0 %s' % (i, 2))
-
+# p = PathUtil(54)
+# syc = p.build_graph_Sycamore()
+# syc.graph = sorted(syc.graph, key=lambda k: k.source)
+# print('t 54 %s' % (len(syc.graph)))
 # for i in range(54):
-#     print('e %s %s' % (i, i+1))
-for i in syc.graph:
-    print('e %s %s' % (i.source, i.target))
+#     print('v %s 0 %s' % (i, 2))
+#
+# # for i in range(54):
+# #     print('e %s %s' % (i, i+1))
+# for i in syc.graph:
+#     print('e %s %s' % (i.source, i.target))
