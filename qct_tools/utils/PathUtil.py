@@ -394,23 +394,23 @@ class PathUtil:
             graph.add(e2)
 
         return reslut
-p = PathUtil(54)
-syc = p.build_graph_Sycamore()
-syc.graph = sorted(syc.graph, key=lambda k: k.source)
-print('t 53 %s' % (len(syc.graph)))
-for i in range(54):
-    if i >3:
-        print('v %s 0 %s' % (i-1, syc.degrees[i]))
-    elif i<3:
-        print('v %s 0 %s' % (i, syc.degrees[i]))
+# p = PathUtil(54)
+# syc = p.build_graph_Sycamore()
+# syc.graph = sorted(syc.graph, key=lambda k: k.source)
+# print('t 53 %s' % (len(syc.graph)))
 # for i in range(54):
-#     print('e %s %s' % (i, i+1))
-for i in syc.graph:
-    if i.source>3 and i.target>3:
-        print('e %s %s' % (i.source-1, i.target-1))
-    elif i.source<3 and i.target<3:
-        print('e %s %s' % (i.source, i.target))
-    elif i.source>3 and i.target<3:
-        print('e %s %s' % (i.source-1, i.target))
-    elif i.source<3 and i.target>3:
-        print('e %s %s' % (i.source, i.target-1))
+#     if i >3:
+#         print('v %s 0 %s' % (i-1, syc.degrees[i]))
+#     elif i<3:
+#         print('v %s 0 %s' % (i, syc.degrees[i]))
+# # for i in range(54):
+# #     print('e %s %s' % (i, i+1))
+# for i in syc.graph:
+#     if i.source>3 and i.target>3:
+#         print('e %s %s' % (i.source-1, i.target-1))
+#     elif i.source<3 and i.target<3:
+#         print('e %s %s' % (i.source, i.target))
+#     elif i.source>3 and i.target<3:
+#         print('e %s %s' % (i.source-1, i.target))
+#     elif i.source<3 and i.target>3:
+#         print('e %s %s' % (i.source, i.target-1))
