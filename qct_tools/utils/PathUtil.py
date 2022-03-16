@@ -416,13 +416,13 @@ class PathUtil:
 #         print('e %s %s' % (i.source, i.target-1))
 
 
-p = PathUtil(53)
-syc = p.build_graph_Sycamore()
-syc.graph = sorted(syc.graph, key=lambda k: k.source)
-print('t 53 %s' % (len(syc.graph)))
-for i in range(53):
-        print('v %s 0 %s' % (i, syc.degrees[i]))
-# for i in range(54):
-#     print('e %s %s' % (i, i+1))
-for i in syc.graph:
-        print('e %s %s' % (i.source, i.target))
+# p = PathUtil(53)
+# syc = p.build_graph_Sycamore()
+# syc.graph = sorted(syc.graph, key=lambda k: k.source)
+# print('t 53 %s' % (len(syc.graph)))
+# for i in range(53):
+#         print('v %s 0 %s' % (i, syc.degrees[i]))
+# # for i in range(54):
+# #     print('e %s %s' % (i, i+1))
+# for i in syc.graph:
+#         print('e %s %s' % (i.source, i.target))
