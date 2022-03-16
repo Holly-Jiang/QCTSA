@@ -71,7 +71,7 @@ if len(sys.argv) == 11:
             print(forw, delta)
             position=20
             if sys.argv[10].__eq__('sycamore'):
-                position=54
+                position=53
                 pathUtil = PathUtil(position)
                 graph = pathUtil.build_graph_Sycamore()
             else:
