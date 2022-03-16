@@ -75,8 +75,6 @@ def get_initial_gql(filename,type,inipath):
             line=line.strip()
             line = line[1:len(line) - 1]
             strlist = line.split(',')
-            if type.__eq__('sycamore') and int(strlist[3]) != -1:
-                continue
             for x in range(len(strlist)):
                 x1 = int(strlist[x])
                 if x1 != -1:

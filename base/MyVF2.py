@@ -12,8 +12,6 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping,sys
     for key, value in mappingresult.items():
         if max_count == value:
             mapkey = mapping[int(key)]
-            if mapkey.__contains__(3):
-                continue
             queue = Queue()
             for i in range(len(mapkey)):
                 if mapkey[i] == 99999:
@@ -38,8 +36,6 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping,sys
                     treemap.pop(keys[0])
                     k = 0
                     for k in range(len(targetAdj[targetNode])):
-                        if system.__eq__('sycamore') and k==3:
-                            continue
                         if ((targetAdj[targetNode][k] != -1 or targetAdj[k][targetNode] != -1)) and not (k in mapkey):
                             mapkey[queryId] = k
                             break
@@ -60,8 +56,6 @@ def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list
     for key, value in mappingresult.items():
         if max_count == value:
             mapkey = mapping[int(key)]
-            if mapkey.__contains__(3):
-                continue
             queue = []
             for i in range(len(mapkey)):
                 if mapkey[i] == 99999:
@@ -78,8 +72,6 @@ def degreeAllocateRemaining(querygraph, targetgraph, mappingresult, mapping:list
                     if mapkey[m] != 99999:
                         nearId=mapkey[m]
                         for k in range(len(targetAdj[nearId])):
-                            if system.__eq__('sycamore') and k == 3:
-                                continue
                             if (not  k in mapkey) and targetAdj[nearId][k]!=-1:
                                 content = '%s-%s' % (targetgraph.nodes[targetAdj[nearId][k]].label, targetAdj[nearId][k])
                                 treemap.update({content: k})

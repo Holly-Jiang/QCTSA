@@ -172,236 +172,245 @@ class PathUtil:
     def build_graph_Sycamore(self):
         reslut = PathResult()
         degree = [0] * self.position
-        for i in range(self.position):
-            reslut.degrees = degree
-            graph = set()
-            reslut.graph = graph
-            graph.clear()
-            for i in range(0, 3):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(3, 6):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(6, 11):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 7
-                e2.source = i + 7
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(12, 18):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(18, 23):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 7
-                e2.source = i + 7
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(24, 30):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(30, 35):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 7
-                e2.source = i + 7
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(36, 42):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(42, 47):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 7
-                e2.source = i + 7
-                e2.target = i
-                degree[i] += 1
-                j = i + 6
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(1, 3):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 5
-                e2.source = i + 5
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(3, 6):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 5
-                e2.source = i + 5
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(6, 12):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(13, 18):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 5
-                e2.source = i + 5
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(18, 24):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(25, 30):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 5
-                e2.source = i + 5
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(30, 36):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(37, 42):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 5
-                e2.source = i + 5
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
-            for i in range(42, 48):
-                e1 = Edge()
-                e2 = Edge()
-                e1.source = i
-                e1.target = i + 6
-                e2.source = i + 6
-                e2.target = i
-                degree[i] += 1
-                j = i + 5
-                degree[j] += 1
-                graph.add(e1)
-                graph.add(e2)
+        reslut.degrees = degree
+        graph = set()
+        reslut.graph = graph
+        graph.clear()
+        for i in range(0, 3):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(4, 6):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(6, 11):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 7
+            e2.source = i + 7
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(12, 18):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(18, 23):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 7
+            e2.source = i + 7
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(24, 30):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(30, 35):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 7
+            e2.source = i + 7
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(36, 42):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(42, 47):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 7
+            e2.source = i + 7
+            e2.target = i
+            degree[i] += 1
+            j = i + 6
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(1, 3):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 5
+            e2.source = i + 5
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(4, 6):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 5
+            e2.source = i + 5
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(6, 12):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(13, 18):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 5
+            e2.source = i + 5
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(18, 24):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(25, 30):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 5
+            e2.source = i + 5
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(30, 36):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(37, 42):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 5
+            e2.source = i + 5
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+        for i in range(42, 48):
+            e1 = Edge()
+            e2 = Edge()
+            e1.source = i
+            e1.target = i + 6
+            e2.source = i + 6
+            e2.target = i
+            degree[i] += 1
+            j = i + 5
+            degree[j] += 1
+            graph.add(e1)
+            graph.add(e2)
+
         return reslut
 p = PathUtil(54)
 syc = p.build_graph_Sycamore()
 syc.graph = sorted(syc.graph, key=lambda k: k.source)
-print('t 54 %s' % (len(syc.graph)))
+print('t 53 %s' % (len(syc.graph)))
 for i in range(54):
-    print('v %s 0 %s' % (i, 2))
-
+    if i >3:
+        print('v %s 0 %s' % (i-1, syc.degrees[i]))
+    elif i<3:
+        print('v %s 0 %s' % (i, syc.degrees[i]))
 # for i in range(54):
 #     print('e %s %s' % (i, i+1))
 for i in syc.graph:
-    print('e %s %s' % (i.source, i.target))
+    if i.source>3 and i.target>3:
+        print('e %s %s' % (i.source-1, i.target-1))
+    elif i.source<3 and i.target<3:
+        print('e %s %s' % (i.source, i.target))
+    elif i.source>3 and i.target<3:
+        print('e %s %s' % (i.source-1, i.target))
+    elif i.source<3 and i.target>3:
+        print('e %s %s' % (i.source, i.target-1))
