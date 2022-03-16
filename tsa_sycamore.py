@@ -67,7 +67,7 @@ if len(sys.argv) == 7:
     print('the output path: ', outpath)
 
     po = open(outpath, "a+")
-    pathUtil = PathUtil(54)
+    pathUtil = PathUtil(53)
     graph = pathUtil.build_graph_Sycamore()
     dist = pathUtil.build_dist_table_tabu(graph.graph)
     ss = filename
@@ -80,7 +80,7 @@ if len(sys.argv) == 7:
     if os.path.isdir(current_path) or current_path.endswith('zip'):
         sys.exit('the path [%s] is valid!' % sys.argv[5])
     fu = FileUtils()
-    fileResult = fu.readQasm(path=current_path, position=54)
+    fileResult = fu.readQasm(path=current_path, position=53)
     l = fileResult.n2gates
     prefix = ''
     print('the circuit: %s, consisting of %d 2-qubit gates' % ( ss, l))
@@ -144,8 +144,8 @@ if len(sys.argv) == 7:
     min_time = in_end - in_start
     revisit='results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[6],prefix, out_file, ss, min_index)
 
-    processingle(revisit,54)
-    min_files = FileUtils.readQasm(revisit, 54)
+    processingle(revisit,53)
+    min_files = FileUtils.readQasm(revisit, 53)
     po.write('%s\n' %(ss))
     po.write('%s %d %d %d %d %d %lf %lf %f\n' % (prefix,
                                          min_index, fileResult.ngates, min_files.ngates, len(min_files.layers),

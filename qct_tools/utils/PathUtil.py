@@ -416,7 +416,7 @@ class PathUtil:
 #         print('e %s %s' % (i.source, i.target-1))
 
 
-p = PathUtil(54)
+p = PathUtil(53)
 syc = p.build_graph_Sycamore()
 syc.graph = sorted(syc.graph, key=lambda k: k.source)
 print('t 53 %s' % (len(syc.graph)))
