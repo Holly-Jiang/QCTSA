@@ -180,15 +180,15 @@ class PathUtil:
             e1 = Edge()
             e2 = Edge()
             e1.source = i
-            e1.target = i + 6
-            e2.source = i + 6
+            e1.target = i + 5
+            e2.source = i + 5
             e2.target = i
             degree[i] += 1
-            j = i + 6
+            j = i + 5
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(4, 6):
+        for i in range(3, 5):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -200,7 +200,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(6, 11):
+        for i in range(5, 10):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -208,11 +208,11 @@ class PathUtil:
             e2.source = i + 7
             e2.target = i
             degree[i] += 1
-            j = i + 6
+            j = i + 7
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(12, 18):
+        for i in range(11, 17):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -224,7 +224,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(18, 23):
+        for i in range(17, 22):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -232,11 +232,11 @@ class PathUtil:
             e2.source = i + 7
             e2.target = i
             degree[i] += 1
-            j = i + 6
+            j = i + 7
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(24, 30):
+        for i in range(23, 29):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -248,7 +248,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(30, 35):
+        for i in range(29, 34):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -256,11 +256,11 @@ class PathUtil:
             e2.source = i + 7
             e2.target = i
             degree[i] += 1
-            j = i + 6
+            j = i + 7
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(36, 42):
+        for i in range(35, 41):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -272,7 +272,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(42, 47):
+        for i in range(41, 46):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -280,7 +280,7 @@ class PathUtil:
             e2.source = i + 7
             e2.target = i
             degree[i] += 1
-            j = i + 6
+            j = i + 7
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
@@ -288,15 +288,15 @@ class PathUtil:
             e1 = Edge()
             e2 = Edge()
             e1.source = i
-            e1.target = i + 5
-            e2.source = i + 5
+            e1.target = i + 4
+            e2.source = i + 4
             e2.target = i
             degree[i] += 1
-            j = i + 5
+            j = i + 4
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(4, 6):
+        for i in range(3, 5):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -308,7 +308,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(6, 12):
+        for i in range(5, 11):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -316,11 +316,11 @@ class PathUtil:
             e2.source = i + 6
             e2.target = i
             degree[i] += 1
-            j = i + 5
+            j = i + 6
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(13, 18):
+        for i in range(12, 17):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -332,7 +332,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(18, 24):
+        for i in range(17, 23):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -340,11 +340,11 @@ class PathUtil:
             e2.source = i + 6
             e2.target = i
             degree[i] += 1
-            j = i + 5
+            j = i + 6
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(25, 30):
+        for i in range(24, 29):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -356,7 +356,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(30, 36):
+        for i in range(29, 35):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -364,11 +364,11 @@ class PathUtil:
             e2.source = i + 6
             e2.target = i
             degree[i] += 1
-            j = i + 5
+            j = i + 6
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(37, 42):
+        for i in range(36, 41):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -380,7 +380,7 @@ class PathUtil:
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
-        for i in range(42, 48):
+        for i in range(41, 47):
             e1 = Edge()
             e2 = Edge()
             e1.source = i
@@ -388,7 +388,7 @@ class PathUtil:
             e2.source = i + 6
             e2.target = i
             degree[i] += 1
-            j = i + 5
+            j = i + 6
             degree[j] += 1
             graph.add(e1)
             graph.add(e2)
@@ -414,3 +414,15 @@ class PathUtil:
 #         print('e %s %s' % (i.source-1, i.target))
 #     elif i.source<3 and i.target>3:
 #         print('e %s %s' % (i.source, i.target-1))
+
+
+p = PathUtil(54)
+syc = p.build_graph_Sycamore()
+syc.graph = sorted(syc.graph, key=lambda k: k.source)
+print('t 53 %s' % (len(syc.graph)))
+for i in range(53):
+        print('v %s 0 %s' % (i, syc.degrees[i]))
+# for i in range(54):
+#     print('e %s %s' % (i, i+1))
+for i in syc.graph:
+        print('e %s %s' % (i.source, i.target))

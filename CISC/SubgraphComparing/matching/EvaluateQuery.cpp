@@ -318,7 +318,7 @@ EvaluateQuery::LFTJ(const Graph *data_graph, const Graph *query_graph, Edges ***
             for (int i = 0; i < query_graph->getVerticesCount(); i++)
                 {
                     if(i==0){
-                    out<<i<<" : "<<7<<endl;    
+                    out<<i<<" : "<<<<endl;
                     continue;
                     }
                    out<<i<<" : "<<99999<<endl;
