@@ -73,6 +73,8 @@ def complete(type: int, out_path, system):
     files = os.listdir('pre_ini_qx20/')
     for file_name in files:
         print(file_name)
+        if file_name.startswith('.'):
+            continue
         mappingpath = 'pre_ini_qx20/%s' % (file_name)
         querypath = 'pre_result/%s' % (file_name)
         outinipath = '%s/%s' % (out_path, file_name)
