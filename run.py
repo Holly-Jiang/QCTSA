@@ -17,6 +17,15 @@ if len(sys.argv) == 11:
     SIZE = sys.argv[2]
     start = time.time()
     forw = float(sys.argv[5])
+    position = 20
+    if sys.argv[10].__eq__('sycamore'):
+        position = 53
+        pathUtil = PathUtil(position)
+        graph = pathUtil.build_graph_Sycamore()
+    else:
+        pathUtil = PathUtil(position)
+        graph = pathUtil.build_graph_QX20()
+    dist = pathUtil.build_dist_table_tabu(graph.graph)
     while forw < float(sys.argv[6]):
         delta = float(sys.argv[7])
         while delta < float(sys.argv[8]):
@@ -69,15 +78,6 @@ if len(sys.argv) == 11:
             print("**********************************************")
             po = open(outpath, "w")
             print(forw, delta)
-            position=20
-            if sys.argv[10].__eq__('sycamore'):
-                position=53
-                pathUtil = PathUtil(position)
-                graph = pathUtil.build_graph_Sycamore()
-            else:
-                pathUtil = PathUtil(position)
-                graph = pathUtil.build_graph_QX20()
-            dist = pathUtil.build_dist_table_tabu(graph.graph)
             count = 0
             print(len(files))
             for fileindex in range(len(files)):
