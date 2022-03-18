@@ -34,46 +34,47 @@ if len(sys.argv) == 11:
         pathUtil = PathUtil(position)
         graph = pathUtil.build_graph_QX20()
     dist = pathUtil.build_dist_table_tabu(graph.graph)
-    out_file = ""
-    type = 0
-    ini_mapping_path = "connect_ini_mapping_q20"
-    if sys.argv[3] == 'num':
-        type = 0
-        out_file += 'numcca'
-    elif sys.argv[3] == 'depth':
-        type = 1
-        out_file += 'depth'
-    elif sys.argv[3] == 'cca':
-        type = 2
-        out_file += 'ccanum'
-    elif sys.argv[3] == 'numdep':
-        type = 3
-        out_file += 'numdep'
-    else:
-        print(
-            'Please input correct parameters : python run.py [[1 connect/degree] [2 small/medium/large/all] [3 num/depth/cca] [4 the output file prefix] [5 range_of_l_a] [6 range_of_l_a] [7 range of delta] [8 range of delta] [9 span of delta]')
-        sys.exit(-1)
-    if sys.argv[1] == 'connect':
-        out_file += 'connect'
-    elif sys.argv[1] == 'degree':
-        ini_mapping_path = "degree_ini_mapping_q20"
-        out_file += 'degree'
-    elif sys.argv[1] == 'ga':
-        ini_mapping_path = 'optm_ini'
-        out_file += 'ga'
-    elif sys.argv[1] == 'fidsl':
-        ini_mapping_path = 'fidsl_ini'
-        out_file += 'fidsl'
-    elif sys.argv[1] == 'sabre':
-        ini_mapping_path = 'sabre_ini'
-        out_file += 'sabre'
-    else:
-        print(
-            'Please input correct parameters : python run.py [[1 connect/degree] [2 small/medium/large/all] [3 num/depth/cca] [4 the output file prefix] [5 range_of_l_a] [6 range_of_l_a] [7 range of delta] [8 range of delta] [9 span of delta]')
-        sys.exit(-1)
+
     while forw < float(sys.argv[6]):
         delta = float(sys.argv[7])
         while delta < float(sys.argv[8]):
+            out_file = ""
+            type = 0
+            ini_mapping_path = "connect_ini_mapping_q20"
+            if sys.argv[3] == 'num':
+                type = 0
+                out_file += 'numcca'
+            elif sys.argv[3] == 'depth':
+                type = 1
+                out_file += 'depth'
+            elif sys.argv[3] == 'cca':
+                type = 2
+                out_file += 'ccanum'
+            elif sys.argv[3] == 'numdep':
+                type = 3
+                out_file += 'numdep'
+            else:
+                print(
+                    'Please input correct parameters : python run.py [[1 connect/degree] [2 small/medium/large/all] [3 num/depth/cca] [4 the output file prefix] [5 range_of_l_a] [6 range_of_l_a] [7 range of delta] [8 range of delta] [9 span of delta]')
+                sys.exit(-1)
+            if sys.argv[1] == 'connect':
+                out_file += 'connect'
+            elif sys.argv[1] == 'degree':
+                ini_mapping_path = "degree_ini_mapping_q20"
+                out_file += 'degree'
+            elif sys.argv[1] == 'ga':
+                ini_mapping_path = 'optm_ini'
+                out_file += 'ga'
+            elif sys.argv[1] == 'fidsl':
+                ini_mapping_path = 'fidsl_ini'
+                out_file += 'fidsl'
+            elif sys.argv[1] == 'sabre':
+                ini_mapping_path = 'sabre_ini'
+                out_file += 'sabre'
+            else:
+                print(
+                    'Please input correct parameters : python run.py [[1 connect/degree] [2 small/medium/large/all] [3 num/depth/cca] [4 the output file prefix] [5 range_of_l_a] [6 range_of_l_a] [7 range of delta] [8 range of delta] [9 span of delta]')
+                sys.exit(-1)
             out_file = '%s%s_forw_%.2f_delta_%.5f' % (SIZE, out_file, forw, delta)
             outpath = 'results/%s/%s' % (sys.argv[4], out_file)
             print("*********************Tabu search start********************")
