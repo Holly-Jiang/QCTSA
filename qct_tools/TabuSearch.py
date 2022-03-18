@@ -29,7 +29,7 @@ class TabuSearch:
             paths = shortpaths[l1][l2].distance
 
             if paths > 3:
-                return False, self.maxIterations
+                return False, currentIteration
             else:
                 g = Gate()
                 g.type = currentLayers[i].type
@@ -38,7 +38,7 @@ class TabuSearch:
                 bestSolutionFound.circuits.append(g)
                 del currentLayers[i]
 
-        return True,self.maxIterations
+        return True, currentIteration
 
     def run(self, initialSolution, type, delta, system:str):
         bestSolution = initialSolution
@@ -70,6 +70,7 @@ class TabuSearch:
             currentIteration+=1
             run, it = self.mustStop(currentIteration, bestSolution)
         run, it = self.mustStop(currentIteration, bestSolution)
-        if run and it<self.maxIterations:
+        if run and it < self.maxIterations:
             return bestSolution
+        print('iteration times %s',it)
         return None

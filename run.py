@@ -163,6 +163,9 @@ if len(sys.argv) == 11:
                                 min_swaps = OW.min_swaps
                                 prefix = "original"
                                 min_index = OW.min_index
+                            else:
+                                print('No solution')
+                            continue
                     else:
                         min_swaps = OW.min_swaps
                         prefix = "original"
@@ -170,25 +173,28 @@ if len(sys.argv) == 11:
 
                     if min_swaps == 0:
                         break
-                in_end = time.time()
-                min_time = in_end - in_start
-                revisit='results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[4],prefix, out_file,ss, min_index)
-                min_files = FileUtils.readQasm(revisit,position)
-                compath = '%s_%s_%d.qasm' % (out_file,ss, min_index)
-                os.system('find results/circuits/%s/*/%s_%s*.qasm ! -name %s -type f -exec rm -rf {} \;' % (
-                    sys.argv[4], out_file,ss, compath))
-                # print('find results/circuits/%s/*/%s_%.2f_%.5f*.qasm ! -name %s -type f -exec rm -rf {} \;'%(sys.argv[4], ss, forw, delta, compath))
-                po.write('%s\n' % (ss))
-                po.write('%s %d %d %d %d %d %lf %lf %f\n' % (prefix,
-                                                             min_index, fileResult.ngates, min_files.ngates,
-                                                             len(min_files.layers), min_swaps*3, forw, delta,
-                                                             min_time))
+                if min_swaps == 99999999:
+                    po.write('%s\n\n' % (ss))
 
+                else:
+                    in_end = time.time()
+                    min_time = in_end - in_start
+                    revisit = 'results/circuits/%s/%s/%s_%s_%d.qasm' % (sys.argv[4], prefix, out_file, ss, min_index)
+                    min_files = FileUtils.readQasm(revisit, position)
+                    compath = '%s_%s_%d.qasm' % (out_file, ss, min_index)
+                    os.system('find results/circuits/%s/*/%s_%s*.qasm ! -name %s -type f -exec rm -rf {} \;' % (
+                        sys.argv[4], out_file, ss, compath))
+                    # print('find results/circuits/%s/*/%s_%.2f_%.5f*.qasm ! -name %s -type f -exec rm -rf {} \;'%(sys.argv[4], ss, forw, delta, compath))
+                    po.write('%s\n' % (ss))
+                    po.write('%s %d %d %d %d %d %lf %lf %f\n' % (prefix,
+                                                                 min_index, fileResult.ngates, min_files.ngates,
+                                                                 len(min_files.layers), min_swaps * 3, forw, delta,
+                                                                 min_time))
 
-                # print(
-                #     'the minimal initial mapping index: %d\nthe ini gates number: %d\nthe output circuit inserted %d CNOT gates\nthe total gates number: %d\nthe 2-qubit gates number: %d\nthe depth of generated circuit: %d\nthe cost time: %d,\n' % (
-                #         min_index, fileResult.ngates, min_swaps*3, min_files.ngates, min_files.n2gates, len(min_files.layers), min_time))
-                po.flush()
+                    # print(
+                    #     'the minimal initial mapping index: %d\nthe ini gates number: %d\nthe output circuit inserted %d CNOT gates\nthe total gates number: %d\nthe 2-qubit gates number: %d\nthe depth of generated circuit: %d\nthe cost time: %d,\n' % (
+                    #         min_index, fileResult.ngates, min_swaps*3, min_files.ngates, min_files.n2gates, len(min_files.layers), min_time))
+                    po.flush()
             end = time.time()
             po.write('time:%f' % (end - start))
             po.flush()
