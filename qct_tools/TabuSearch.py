@@ -44,7 +44,7 @@ class TabuSearch:
         bestSolution = initialSolution
         currentIteration = 0
         run,it=self.mustStop(currentIteration, bestSolution)
-        while not run and it<self.maxIterations:
+        while (not run) and it<self.maxIterations:
             candidateNeighbors = list(bestSolution.getNeighbors(type,delta,system))
             solutionsInTabu = self.tabulist
             bestneighborfound = findBestNeighbor(candidateNeighbors, solutionsInTabu,type)
