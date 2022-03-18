@@ -72,7 +72,7 @@ class QCT:
                     tempValue = ts.run(initialSolution, type, delta,system)
                     if tempValue == None:
                         self.writeCircuits(initialSolution.circuits, resultwriter)
-                        print('no candidate set')
+                        print('the %s-th solution no candidate set, %s' %(i, d))
                         continue
                     if tem_swap > len(tempValue.swaps):
                         returnValue = tempValue
