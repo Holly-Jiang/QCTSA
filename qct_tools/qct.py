@@ -62,6 +62,8 @@ class QCT:
                 initialSolution.circuits.append(all_g)
             neighborResult = self.buildInstance(graph= graph,currentLayers=currentLayers, dist= dist, qubits=qubits, locations=locations, nextLayers_1=nextlayers_1, parent=initialSolution,type=type,delta=delta,system=system)
             solutions = neighborResult.solutions
+
+
             if len(solutions) > 0:
                 tem_swap = 9999999
                 returnValue = initialSolution
@@ -71,10 +73,12 @@ class QCT:
                     if tempValue == None:
                         self.writeCircuits(initialSolution.circuits, resultwriter)
                         print('no candidate set')
-                        return
+                        continue
                     if tem_swap > len(tempValue.swaps):
                         returnValue = tempValue
                         tem_swap = len(tempValue.swaps)
+                if tem_swap == 9999999:
+                    return None
                 locations = returnValue.locations
                 qubits = returnValue.qubits
                 for i in range(len(returnValue.swaps)):
@@ -84,6 +88,7 @@ class QCT:
                 self.writeCircuits(all_gates=all_gates, fw = resultwriter)
                 self.writeCircuits(all_gates=neighborResult.curr_solved_gates,fw= resultwriter)
                 continue
+
         resultwriter.close()
         in_end = time.time()
         iniWriter.min_index = x
@@ -117,7 +122,8 @@ class QCT:
                            'include \"qelib1.inc\";\n'
                            'qreg q[16];\n'
                            'creg c[16];\n')
-        ts = TabuSearch(list(), maxIterations=100)
+        ts = TabuSearch(list(), maxIterations=500)
+        it=0
         for d in range(len(layers)):
             # print(d,'=================================================')
             all_gates = []
@@ -155,12 +161,13 @@ class QCT:
             else:
                 self.writeCircuits(all_gates=all_gates, fw= resultwriter)
                 self.writeCircuits(all_gates=neighborResult.curr_solved_gates, fw= resultwriter)
-
                 continue
             returnValue = ts.run(initialSolution, type, delta,system)
             if returnValue == None:
                 self.writeCircuits(all_gates=initialSolution.circuits, fw=resultwriter)
                 print('no candidates')
+                it=500
+                break
             locations = returnValue.locations
             qubits = returnValue.qubits
             # if len(returnValue.swaps)>50:
@@ -172,7 +179,8 @@ class QCT:
             for swa in returnValue.swaps:
                 swaps.append(swa)
             self.writeCircuits(all_gates=returnValue.circuits, fw=resultwriter)
-
+        if it == 500:
+            return  None
         resultwriter.close()
         in_end = time.time()
         iniWriter.min_index = x

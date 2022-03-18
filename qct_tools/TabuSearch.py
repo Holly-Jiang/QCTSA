@@ -17,8 +17,7 @@ class TabuSearch:
     def mustStop(self, currentIteration, bestSolutionFound):
         if currentIteration > self.maxIterations:
             print('the search is bounded %s times' %self.maxIterations)
-            sys.exit(-1)
-            return True
+            return True, self.maxIterations
         shortpaths = bestSolutionFound.dist
         currentLayers = bestSolutionFound.currentLayers
         i = 0
@@ -30,7 +29,7 @@ class TabuSearch:
             paths = shortpaths[l1][l2].distance
 
             if paths > 3:
-                return False
+                return False, self.maxIterations
             else:
                 g = Gate()
                 g.type = currentLayers[i].type
@@ -39,12 +38,13 @@ class TabuSearch:
                 bestSolutionFound.circuits.append(g)
                 del currentLayers[i]
 
-        return True
+        return True,self.maxIterations
 
     def run(self, initialSolution, type, delta, system:str):
         bestSolution = initialSolution
         currentIteration = 0
-        while not self.mustStop(currentIteration, bestSolution):
+        run,it=self.mustStop(currentIteration, bestSolution)
+        while not run and it<self.maxIterations:
             candidateNeighbors = list(bestSolution.getNeighbors(type,delta,system))
             solutionsInTabu = self.tabulist
             bestneighborfound = findBestNeighbor(candidateNeighbors, solutionsInTabu,type)
@@ -68,8 +68,8 @@ class TabuSearch:
             # bestSolution=bestneighborfound
             # currentSolution =bestSolution
             currentIteration+=1
-
-
-        if self.mustStop(currentIteration, bestSolution):
+            run, it = self.mustStop(currentIteration, bestSolution)
+        run, it = self.mustStop(currentIteration, bestSolution)
+        if run and it<self.maxIterations:
             return bestSolution
         return None
