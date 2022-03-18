@@ -25,6 +25,15 @@ if len(sys.argv) == 11:
     SIZE = sys.argv[2]
     start = time.time()
     forw = float(sys.argv[5])
+    position = 20
+    if sys.argv[10].__eq__('sycamore'):
+        position = 53
+        pathUtil = PathUtil(position)
+        graph = pathUtil.build_graph_Sycamore()
+    else:
+        pathUtil = PathUtil(position)
+        graph = pathUtil.build_graph_QX20()
+    dist = pathUtil.build_dist_table_tabu(graph.graph)
     out_file = ""
     type = 0
     ini_mapping_path = "connect_ini_mapping_q20"
@@ -65,7 +74,6 @@ if len(sys.argv) == 11:
     while forw < float(sys.argv[6]):
         delta = float(sys.argv[7])
         while delta < float(sys.argv[8]):
-
             out_file = '%s%s_forw_%.2f_delta_%.5f' % (SIZE, out_file, forw, delta)
             outpath = 'results/%s/%s' % (sys.argv[4], out_file)
             print("*********************Tabu search start********************")
