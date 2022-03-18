@@ -153,8 +153,8 @@ if len(sys.argv) == 11:
                                     prefix = "original"
                                     min_index = OW.min_index
                         else:
-                            print("IW: " + IW)
-                            print("OW: " + OW)
+                            print("IW: " + IW==None)
+                            print("OW: " + OW==None)
                             if (IW != None and min_swaps > IW.min_swaps):
                                 min_swaps = IW.min_swaps
                                 prefix = "improve"
