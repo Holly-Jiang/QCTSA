@@ -47,7 +47,7 @@ if len(sys.argv) == 7:
         ini_mapping_path = 'optm_ini'
         out_file += 'ga'
     elif sys.argv[1] == 'fidsl':
-        ini_mapping_path = 'fidsl_ini'
+        ini_mapping_path = 'fidsl_ini_qx20'
         out_file += 'fidsl'
     elif sys.argv[1] == 'sabre':
         ini_mapping_path = 'sabre_ini'
