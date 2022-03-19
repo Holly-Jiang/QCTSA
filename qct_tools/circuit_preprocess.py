@@ -77,7 +77,7 @@ def get_initial_gql(filename,type,inipath):
             strlist = line.split(',')
             for x in range(len(strlist)):
                 x1 = int(strlist[x])
-                if x1 != -1:
+                if x1 != -1 and x1!=position:
                     logical_qubits[x] = x1
                     physical_qubits[x1] = x
             results.qlist.append(logical_qubits)
