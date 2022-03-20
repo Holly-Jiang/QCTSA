@@ -46,12 +46,9 @@ if len(sys.argv) == 7:
     elif sys.argv[1] == 'ga':
         ini_mapping_path = 'optm_ini'
         out_file += 'ga'
-    elif sys.argv[1] == 'fidls' and sys.argv[10].__eq__('sycamore'):
+    elif sys.argv[1] == 'fidls':
         ini_mapping_path = 'fidls_inimap_sycamore'
         out_file += 'fidls_inimap_sycamore'
-    elif sys.argv[1] == 'fidls':
-        ini_mapping_path = 'fidls_inimap_tokyo_top'
-        out_file += 'fidls_inimap_tokyo_top'
     elif sys.argv[1] == 'sabre':
         ini_mapping_path = 'sabre_ini'
         out_file += 'sabre'
