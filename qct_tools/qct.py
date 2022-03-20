@@ -72,12 +72,13 @@ class QCT:
                     tempValue = ts.run(initialSolution, type, delta,system)
                     if tempValue == None:
                         self.writeCircuits(initialSolution.circuits, resultwriter)
-                        print('the %s-th solution no candidate set, %s' %(i, d))
+                        print('improve the %s-th solution no candidate set, %s' %(i, d))
                         continue
                     if tem_swap > len(tempValue.swaps):
                         returnValue = tempValue
                         tem_swap = len(tempValue.swaps)
                 if tem_swap == 9999999:
+                    print('improve no solution')
                     return None
                 locations = returnValue.locations
                 qubits = returnValue.qubits
@@ -165,7 +166,7 @@ class QCT:
             returnValue = ts.run(initialSolution, type, delta,system)
             if returnValue == None:
                 self.writeCircuits(all_gates=initialSolution.circuits, fw=resultwriter)
-                print('no candidates')
+                print('original no candidates')
                 it=500
                 break
             locations = returnValue.locations
