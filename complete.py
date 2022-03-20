@@ -52,7 +52,7 @@ def completeSingle(file_name, type: int, out_path, system):
         for i in range(len(stateset)):
             res = [-1] * 20
             if system.__eq__('sycamore'):
-                res = [-1] * 54
+                res = [-1] * 53
             for j in range(len(stateset[i])):
                 res[stateset[i][j]] = j
             iniwriter.write(str(res))

@@ -56,50 +56,13 @@ def get_distance_matrix(coupling_graph: Graph) -> np.matrix:
     distance_matrix = floyd_warshall_numpy(coupling_graph)
     return distance_matrix
 
-def get_initial_fidls(filename,type,inipath):
-    gql_ini_path = "%s/%s" % (inipath, filename)
-    results = FileResult()
-    position=20
-    if type.__eq__('sycamore'):
-        position=54
-    if os.path.exists(gql_ini_path):
-        file = open(gql_ini_path, 'r')
-        for line in file:
-            if line == '':
-                break
-
-            physical_qubits = [-1] * position
-            logical_qubits = list(physical_qubits)
-            line = line.strip('\n')
-            line=line.strip()
-            line = line[1:len(line) - 1]
-            strlist = line.split(',')
-            for x in range(len(strlist)):
-                x1 = int(strlist[x])
-                if x1 != -1:
-                    logical_qubits[x] = x1
-                    physical_qubits[x1] = x
-            results.qlist.append(logical_qubits)
-            results.lolist.append(physical_qubits)
-    else:
-        print('there no initial mapping', gql_ini_path)
-    index=0
-    for i in range(len((results.lolist[0]))):
-        if results.lolist[0][i]!=-1:
-            index=i
-    out=open('./pre_ini_qx20/%s'%filename,'a')
-    out.write('t\n')
-    for i in range(index+1):
-        out.write('%s : %s\n'%(i, results.lolist[0][i]))
-    out.flush()
-    out.close()
 
 def get_initial_gql(filename,type,inipath):
     gql_ini_path = "%s/%s" % (inipath, filename)
     results = FileResult()
     position=20
     if type.__eq__('sycamore'):
-        position=54
+        position=53
     if os.path.exists(gql_ini_path):
         file = open(gql_ini_path, 'r')
         for line in file:

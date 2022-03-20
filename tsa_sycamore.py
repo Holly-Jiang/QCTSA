@@ -7,11 +7,10 @@ from base.Gate import Gate
 # from complete import completeSingle
 from complete import completeSingle
 from processing import processingle
-from qct_tools.circuit_preprocess import get_initial_gql, get_initial_fidls
+from qct_tools.circuit_preprocess import get_initial_gql
 from qct_tools.qct import QCT
 from qct_tools.utils.FileUtils import FileUtils
 from qct_tools.utils.PathUtil import PathUtil
-
 
 if len(sys.argv) == 7:
     start = time.time()
@@ -50,8 +49,6 @@ if len(sys.argv) == 7:
     elif sys.argv[1] == 'fidls':
         ini_mapping_path = 'fidls_inimap_sycamore'
         out_file += 'fidls_inimap_sycamore'
-        get_initial_fidls(filename, 'sycamore', ini_mapping_path)
-        completeSingle(filename, type, ini_mapping_path, 'sycamore')
     elif sys.argv[1] == 'sabre':
         ini_mapping_path = 'sabre_ini'
         out_file += 'sabre'
