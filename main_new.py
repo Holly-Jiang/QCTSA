@@ -8,7 +8,27 @@ import os, sys, math
 
 # Press the green button in the gutter to run the script.
 from qct_tools.utils.FileUtils import FileUtils
+def read_fidls_syc_files(path):
+    if path=='':
+        print('the path \'%s\' is not exist'%path)
+    map=dict()
+    f = open(path, "r")
+    while True:
+        line = f.readline().strip()
+        if line.startswith('****************************') or (not line) or line.__eq__('') :
+            line = f.readline()
+            break
 
+    while True:
+        line = f.readline().strip()
+        if (not line) or line.__eq__('')  or (not line.startswith('(')):
+            break
+        list1=list()
+        arr=line.split('(')[1].split(')')[0].split(',')
+        for i in range(2,len(arr)):
+                list1.append(float(arr[i]))
+        map['%s'%arr[1].strip()[1:len(arr[1])-2]]=list1
+    return map
 
 def read_tabu_files(path):
     if path == '':
@@ -69,6 +89,8 @@ def read_sabre_files(path):
         list1.append(float(arr[0]))
         list1.append(float(arr[1]))
         list1.append(float(arr[2]))
+        if float(arr[2])>3600:
+            print(str,line)
         map[str] = list1
     return map
 
@@ -409,7 +431,77 @@ def caculateTheAdjustTSA():
     print("SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
     print("FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
     print('average: %s' % (((optmgate - tsagate + 0.0) / optmgate+(sabregate - tsagate + 0.0) / sabregate  +(fidslgate - tsagate + 0.0) / fidslgate) / 3))
+def caculateTheAdjustTSA_QX20():
+    print('_________________________comparison of <*_TSA_num_QX20>______________________')
+    fcca = "./results/data/tsa/fidls_tsa_q20"
+    fidslcca = read_tabu_files(fcca)
+    tcca = "./results/data/tsa/tsa"
+    tsacca = read_tabu_files(tcca)
+    occa = "./results/data/tsa/ga_tsa"
+    optmcca = read_tabu_files(occa)
+    sabrestr = "./results/data/tsa/sabre_tsa"
+    sabremap = read_tabu_files(sabrestr)
+    names = list()
+    it = tsacca.keys()
+    for k in it:
+        if fidslcca.get(k) == None:
+            names.append(k)
+        elif optmcca.get(k) == None:
+            names.append(k)
+        elif sabremap.get(k) == None:
+            names.append(k)
+    for i in range(len(names)):
+        del tsacca[names[i]]
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsacca.keys()
+    for k in it:
+        tsagate += tsacca.get(k)[5]
+        fidsltsa = fidslcca.get(k)
+        fidslgate += fidsltsa[5]
+        optm = optmcca.get(k)
+        ori += tsacca.get(k)[2]
+        optmgate += optm[5]
+        sab = sabremap.get(k)
+        sabregate += sab[5]
+    print("number of case:", len(tsacca), "ORI: ", ori, "GA: ", optmgate, "SABRE: ", sabregate,
+          "FiDSL: ", fidslgate, "TSA_num: ", tsagate)
+    print("GA: ", (optmgate - tsagate + 0.0) / optmgate)
+    print("SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
+    print("FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    print('average: %s' % (((optmgate - tsagate + 0.0) / optmgate+(sabregate - tsagate + 0.0) / sabregate  +(fidslgate - tsagate + 0.0) / fidslgate) / 3))
 
+
+def caculateTheAdjustTSA_sycamore():
+    print('_________________________comparison of <*_TSA_num_Sycamore>______________________')
+    fcca = "./results/data/tsa_sycamore/fidls_tsa"
+    fidslcca = read_tabu_files(fcca)
+    tcca = "./results/data/tsa_sycamore/tsa"
+    tsacca = read_tabu_files(tcca)
+    names = list()
+    it = tsacca.keys()
+    for k in it:
+        if fidslcca.get(k) == None:
+            names.append(k)
+    for i in range(len(names)):
+        del tsacca[names[i]]
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsacca.keys()
+    for k in it:
+        tsagate += tsacca.get(k)[5]
+        fidsltsa = fidslcca.get(k)
+        fidslgate += fidsltsa[5]
+        ori += tsacca.get(k)[2]
+    print("number of case:", len(tsacca), "ORI: ", ori,
+          "FiDSL: ", fidslgate, "TSA_num: ", tsagate)
+    print("FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
 def caculateTheAdjustCCA():
     print('_________________________comparison of <*_TSA_cca>______________________')
     fcca = "./results/data/cca/fidsl_cca"
@@ -459,6 +551,8 @@ def caculateTheAdjustOptm():
     print('_________________________comparison of <*_GA>______________________')
     sabreoptm = "./results/data/optm/sabre_optm"
     sabremap = read_sabre_files(sabreoptm)
+    fidlsoptm = "./results/data/optm/FiDLS_GA"
+    fidlsmap = read_sabre_files(fidlsoptm)
     optmStr = "./results/data/optm/total_A_ini_connect"
     optmmap = readOptm(optmStr)
     optmStr1 = "./results/data/optm/GA_num"
@@ -475,12 +569,13 @@ def caculateTheAdjustOptm():
     for k in it:
         optm = optmmap.get(k)
         optm1 = optmmap1.get(k)
-        if optm[2][3] != 9999999 and optm[3][3] != 9999999 and optm1[1][3] != 9999999 and sabremap.get(k)[
+        if  optm[3][3] != 9999999 and optm1[1][3] != 9999999 and sabremap.get(k)[
+            1] != 9999999 and fidlsmap.get(k)!=None and fidlsmap.get(k)[
             1] != 9999999:
             count += 1
             ori += tsamap.get(k)[2]
             tsagate += optm[3][3] * 3
-            fidslgate += optm[2][3] * 3
+            fidslgate += fidlsmap.get(k)[2] * 3
             optmgate += optm1[1][3] * 3
             sabregate += sabremap.get(k)[2] * 3
     print("number of case: ", count, "ORI: ", ori, ", GA: ", optmgate, ", SABRE: ", sabregate, ", FiDSL: ", fidslgate,
@@ -489,6 +584,79 @@ def caculateTheAdjustOptm():
     print("(SABRE-TSA_num)/SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
     print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
     print('average: %s'%(((optmgate - tsagate + 0.0) / optmgate+(sabregate - tsagate + 0.0) / sabregate+(fidslgate - tsagate + 0.0) / fidslgate)/3))
+
+def caculateTheAdjustFiDSL_QX20():
+    print('_________________________comparison of <*_FiDSL_QX20>______________________')
+    fcca = "./results/data/fidls_qx20/top_fidls"
+    fidslcca = read_fidls_syc_files(fcca)
+    tcca = "./results/data/fidls_qx20/tsa_fidls"
+    tsacca = read_fidls_syc_files(tcca)
+    occa = "./results/data/fidls_qx20/ga_fidls"
+    optmcca = read_fidls_syc_files(occa)
+    sabre = "./results/data/fidls_qx20/sabre_fidls"
+    sabremap = read_fidls_syc_files(sabre)
+    names = list()
+
+    tsamap = read_tabu_files("./results/data/tsa/tsa")
+    it = tsacca.keys()
+    for k in it:
+        if fidslcca.get(k) == None or fidslcca.get(k)[1] == 9999999:
+            names.append(k)
+        elif optmcca.get(k) == None or optmcca.get(k)[1] == 9999999:
+            names.append(k)
+        elif sabremap.get(k) == None or sabremap.get(k)[1] == 9999999:
+            names.append(k)
+    for i in range(len(names)):
+        del tsacca[names[i]]
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsacca.keys()
+    for k in it:
+        tsagate += tsacca.get(k)[3]
+        fidsltsa = fidslcca.get(k)
+        fidslgate += fidsltsa[3]
+        optm = optmcca.get(k)
+        ori += tsamap.get(k)[3]
+        optmgate += optm[3]
+        sab = sabremap.get(k)
+        sabregate += sab[3]
+    print("number of case: ", len(tsacca), "ORI: ",ori,
+          ", GA: ", optmgate,  ", SABRE: ", sabregate, ", FiDSL: ", fidslgate, ", TSA_num: ", tsagate)
+    print("(GA-TSA_num)/GA: ", (optmgate - tsagate + 0.0) / optmgate)
+    print("(SABRE-TSA_num)/SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
+    print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    print('average: %s' %((( optmgate - tsagate + 0.0) / optmgate+ (sabregate - tsagate + 0.0) / sabregate +(fidslgate - tsagate + 0.0) / fidslgate )/3))
+def caculateTheAdjustFiDSL_Sycamore():
+    print('_________________________comparison of <*_FiDSL_Sycamore>______________________')
+    fcca = "./results/data/fidls_sycamore/top_fidls"
+    fidslcca = read_fidls_syc_files(fcca)
+    tcca = "./results/data/fidls_sycamore/tsa_fidls"
+    tsacca = read_fidls_syc_files(tcca)
+    names = list()
+
+    tsamap = read_tabu_files("./results/data/tsa/tsa")
+    it = tsacca.keys()
+    for k in it:
+        if fidslcca.get(k) == None or fidslcca.get(k)[1] == 9999999:
+            names.append(k)
+    for i in range(len(names)):
+        del tsacca[names[i]]
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsacca.keys()
+    for k in it:
+        tsagate += tsacca.get(k)[3]
+        fidsltsa = fidslcca.get(k)
+        fidslgate += fidsltsa[3]
+        ori += tsamap.get(k)[3]
+    print("number of case: ", len(tsacca), "ORI: ",ori, "FiDSL: ", fidslgate, ", TSA_num: ", tsagate)
+    print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
 
 
 def caculateTheAdjustFiDSL():
@@ -581,7 +749,89 @@ def caculateTheAdjustSABRE():
     print("(SABRE-TSA_num)/SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
     print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
     print('average: %s' % ((((optmgate - tsagate + 0.0) / optmgate + (sabregate - tsagate + 0.0) / sabregate + (fidslgate - tsagate + 0.0) / fidslgate ) / 3)))
+def caculateFiDSL_QX20():
+    print('________________comparison of <FiDSL_*_QX20>__________________')
+    topgraph = "./results/data/fidls_qx20/top_fidls"
+    fidslmap = read_fidls_syc_files(topgraph)
+    optmStr = "./results/data/optm/FiDLS_GA"
+    optmmap = read_sabre_files(optmStr)
+    # optmStr1 = "./results/data/optm/GA_num"
+    # optm_result1 = readOptm(optmStr1)
+    # optmStr = "./results/data/optm/sabre_optm"
+    # optmmap = read_sabre_files(optmStr)
+    sabrestr = "./results/data/sabre/fidsl_sabre"
+    sabremap = read_sabre_files(sabrestr)
+    count = 0
+    tsamap = read_tabu_files("./results/data/tsa/fidls_tsa_q20")
+    ccamap = read_tabu_files("./results/data/cca/fidsl_cca")
+    names = list()
+    it = tsamap.keys()
+    for k in it:
+        if (optmmap.get(k) == None or optmmap.get(k)[2] == 9999999):
+            names.append(k)
+        if fidslmap.get(k) == None or fidslmap.get(k)[3] == 9999999:
+            names.append(k)
+        # if optmmap.get(k) == None or optmmap.get(k)[1]==9999999:
+        #     names.append(k)
+        if sabremap.get(k) == None or sabremap.get(k)[1] == 9999999:
+            names.append(k)
 
+    for i in range(len(names)):
+        if names[i] in tsamap.keys():
+            del tsamap[names[i]]
+
+    ccagate = 0
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsamap.keys()
+    for k in it:
+        tsagate += tsamap.get(k)[5]
+        fidslgate += fidslmap.get(k)[3]
+        ori += tsamap.get(k)[2]
+        optmgate += optmmap.get(k)[2] * 3
+        ccagate += ccamap.get(k)[5]
+        sabregate += sabremap.get(k)[1]
+    print("number of case: ", len(tsamap),'ori:',ori,
+          "GA: ", optmgate, "SABRE: ", sabregate, "FiDSL: ", fidslgate, "TSA_num: ", tsagate, ", TSA_cca: ", ccagate)
+    print("(GA-TSA_num)/GA: ", (optmgate - tsagate + 0.0) / optmgate)
+    print("(SABRE-TSA_num)/SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
+    print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    print("(TSA_cca-TSA_num)/TSA_cca: ", (ccagate - tsagate + 0.0) / ccagate)
+def caculateFiDSL_Sycamore():
+    print('________________comparison of <FiDSL_*_sycamore>__________________')
+    topgraph = "./results/data/fidls_sycamore/top_fidls"
+    fidslmap = read_fidls_syc_files(topgraph)
+    count = 0
+    tsamap = read_fidls_syc_files("./results/data/fidls_sycamore/tsa_fidls")
+    # ccamap = read_tabu_files("./results/data/cca/fidsl_cca")
+    names = list()
+    it = tsamap.keys()
+    for k in it:
+        if fidslmap.get(k) == None or fidslmap.get(k)[1] == 9999999:
+            names.append(k)
+
+    for i in range(len(names)):
+        if names[i] in tsamap.keys():
+            del tsamap[names[i]]
+
+    ccagate = 0
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsamap.keys()
+    for k in it:
+        tsagate += tsamap.get(k)[3]
+        fidslgate += fidslmap.get(k)[3]
+        ori += tsamap.get(k)[1]
+        # ccagate += ccamap.get(k)[5]
+    print("number of case: ", len(tsamap),'ori:',ori, "FiDSL: ", fidslgate, "TSA_num: ", tsagate, ", TSA_cca: ", ccagate)
+    print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    # print("(TSA_cca-TSA_num)/TSA_cca: ", (ccagate - tsagate + 0.0) / ccagate)
 
 def caculateFiDSL_():
     print('________________comparison of <FiDSL_*>__________________')
@@ -681,7 +931,81 @@ def caculateTSA_():
     print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
     print("(TSA_cca-TSA_num)/TSA_cca: ", (ccagate - tsagate + 0.0) / ccagate)
 
+def caculateTSA_Sycamore():
+    print('________________comparison of <TSA_*_sycamore>__________________')
+    topgraph = "./results/data/fidls_sycamore/tsa_fidls"
+    fidslmap = read_fidls_syc_files(topgraph)
+    tsamap = read_tabu_files("./results/data/tsa_sycamore/tsa")
+    # ccamap = read_tabu_files("./results/data/cca/tsa_cca")
+    names = list()
+    it = tsamap.keys()
+    for k in it:
+        if fidslmap.get(k) == None or fidslmap.get(k)[1] - 9999999 == 0:
+            names.append(k)
+    for i in range(len(names)):
+        if names[i] in tsamap.keys():
+            del tsamap[names[i]]
+    ccagate = 0
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsamap.keys()
+    for k in it:
+        tsagate += tsamap.get(k)[5]
+        fidslgate += fidslmap.get(k)[3]
+        ori += tsamap.get(k)[2]
+    print("number of case: ", len(tsamap), "ori: ", ori,
+          ", FiDSL: ", fidslgate, ", TSA_num: ", tsagate, ", TSA_cca: ", ccagate)
 
+    print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    # print("(TSA_cca-TSA_num)/TSA_cca: ", (ccagate - tsagate + 0.0) / ccagate)
+
+
+def caculateTSA_QX20():
+    print('________________comparison of <TSA_*QX20>__________________')
+    topgraph = "./results/data/fidls_qx20/tsa_fidls"
+    fidslmap = read_fidls_syc_files(topgraph)
+    optmStr = "./results/data/optm/total_A_ini_connect"
+    optmmap = readOptm(optmStr)
+
+    sabrestr = "./results/data/sabre/tsa_sabre"
+    sabremap = read_sabre_files(sabrestr)
+    tsamap = read_tabu_files("./results/data/tsa/tsa")
+    ccamap = read_tabu_files("./results/data/cca/tsa_cca")
+    names = list()
+    it = tsamap.keys()
+    for k in it:
+        if (optmmap.get(k) == None or optmmap.get(k)[3][3] - 9999999 == 0):
+            names.append(k)
+        if fidslmap.get(k) == None or fidslmap.get(k)[1] - 9999999 == 0:
+            names.append(k)
+        if sabremap.get(k) == None or sabremap.get(k)[1] - 9999999 == 0:
+            names.append(k)
+    for i in range(len(names)):
+        if names[i] in tsamap.keys():
+            del tsamap[names[i]]
+    ccagate = 0
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsamap.keys()
+    for k in it:
+        tsagate += tsamap.get(k)[5]
+        fidslgate += fidslmap.get(k)[3]
+        ori += tsamap.get(k)[2]
+        optmgate += optmmap.get(k)[3][3] * 3
+        ccagate += ccamap.get(k)[5]
+        sabregate += sabremap.get(k)[1]
+    print("number of case: ", len(tsamap), "ori: ", ori, ", GA: ", optmgate, ", SABRE: ", sabregate,
+          ", FiDSL: ", fidslgate, ", TSA_num: ", tsagate, ", TSA_cca: ", ccagate)
+    print("(GA-TSA_num)/GA: ", (optmgate - tsagate + 0.0) / optmgate)
+    print("(SABRE-TSA_num)/SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
+    print("(FiDSL-TSA_num)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    print("(TSA_cca-TSA_num)/TSA_cca: ", (ccagate - tsagate + 0.0) / ccagate)
 def caculateOptm_():
     print('________________comparison of <GA_*>__________________')
     topgraph = "./results/data/fidsl/optm_fidsl"
@@ -1250,13 +1574,21 @@ if __name__ == '__main__':
         caculateTheAdjustOptm()
         caculateTheAdjustSABRE()
         caculateTheAdjustFiDSL()
+        caculateTheAdjustFiDSL_QX20()
+        caculateTheAdjustFiDSL_Sycamore()
         caculateTheAdjustTSA()
+        caculateTheAdjustTSA_QX20()
+        caculateTheAdjustTSA_sycamore()
         caculateTheAdjustCCA()
     elif sys.argv[1].__eq__('adj'):
         caculateOptm_()
         caculateSABRE_()
         caculateFiDSL_()
+        caculateFiDSL_QX20()
+        caculateFiDSL_Sycamore()
         caculateTSA_()
+        caculateTSA_QX20()
+        caculateTSA_Sycamore()
     elif sys.argv[1].__eq__('pairwise'):
         # paiwise type sabre fidsl tsa cca
         # pairwise medium ./results/data/sabre/sabre ./results/data/fidsl/fidsl  ./results/data/tsa/tsa ./results/data/cca/tsa_cca  ./results/qct ./results/new/gatsa

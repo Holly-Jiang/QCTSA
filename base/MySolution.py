@@ -39,11 +39,11 @@ def computeCCAValue(dist, locations, currentLayers, nextLayers_1, delta):
 
     return result
 
-def computeCCAValue1(oldlocation, dist, locations, currentLayers, nextLayers_1, delta):
+def computeCCAValue1(oldlocation, dist, locations, currentLayers, nextLayers_1, delta,system:str):
     result = Score()
     submake = 0.0
     subbreak = 0.0
-    FileUtils.compute_depth(currentLayers)
+    FileUtils.compute_depth(currentLayers,system)
     for i in range(len(currentLayers)):
         oldloc1 = oldlocation[currentLayers[i].control]
         oldloc2 = oldlocation[currentLayers[i].target]
@@ -160,11 +160,11 @@ def computeValue(dist: list, locations: list, currentLayers: list, nextLayers_1:
     return result
 
 
-def computeDepthvalue(currentLayers, nextLayers_1, delta):
-    depthfile = FileUtils.compute_depth(currentLayers)
-    next = FileUtils.compute_depth(nextLayers_1)
+def computeDepthvalue(currentLayers, nextLayers_1, delta,system:str):
+    depthfile = FileUtils.compute_depth(currentLayers,system)
+    next = FileUtils.compute_depth(nextLayers_1,system)
     return len(depthfile.layers) + len(next.layers) * delta
-def computeDepthvalue1(circuit, nextLayers_1):
+def computeDepthvalue1(circuit, nextLayers_1,system:str):
     layer=[]
     if len(circuit) > 0:
         for i in range(len(circuit)):
@@ -172,11 +172,11 @@ def computeDepthvalue1(circuit, nextLayers_1):
     if len(nextLayers_1) > 0:
         for i in range(len(nextLayers_1)):
             layer.append(nextLayers_1[i])
-    depthfile = FileUtils.compute_depth(layer)
+    depthfile = FileUtils.compute_depth(layer,system)
     return len(depthfile.layers)
 
-def computeDepth(currentLayers):
-    depthfile = FileUtils.compute_depth(currentLayers)
+def computeDepth(currentLayers,system:str):
+    depthfile = FileUtils.compute_depth(currentLayers,system)
     return len(depthfile.layers)
 def getsubscore(gate:Gate, paths):
     result = 9999999
@@ -281,21 +281,21 @@ class MySolution(Solution):
                         if type == 0:
                             #num cca
                             s.score = computeValue(dist, newLocations, currentLayers, nextLayers_1, delta)
-                            s.subscore = computeCCAValue1(parent.locations, dist, newLocations, currentLayers, nextLayers_1, delta).subscore
+                            s.subscore = computeCCAValue1(parent.locations, dist, newLocations, currentLayers, nextLayers_1, delta,system).subscore
                         elif type == 1:
                             #dep num
-                            s.score=computeDepthvalue1(s.circuits,nextLayers_1)
+                            s.score=computeDepthvalue1(s.circuits,nextLayers_1,system)
                             # s.score = computeDepth(s.circuits)
                             s.subscore = computeValue(dist, newLocations, currentLayers, nextLayers_1, delta)
                         elif type==2:
                             # cca num
-                            score = computeCCAValue1(parent.locations, dist, newLocations, currentLayers, nextLayers_1, delta)
+                            score = computeCCAValue1(parent.locations, dist, newLocations, currentLayers, nextLayers_1, delta,system)
                             s.subscore = computeValue(dist, newLocations, currentLayers, nextLayers_1, delta)
                             s.score =score.subscore
                         else:
                             #num dep
                             s.score = computeValue(dist, newLocations, currentLayers, nextLayers_1, delta)
-                            s.subscore = computeDepth(s.circuits)
+                            s.subscore = computeDepth(s.circuits,system)
 
                         solutions.append(s)
         result.solutions = solutions

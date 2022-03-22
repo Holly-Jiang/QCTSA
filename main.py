@@ -201,6 +201,8 @@ def  selectTheMinimalGatesFromFiles(path,name,exam):
     for k in it:
         res['%s'%k]=mapu.get(k)
         for file in files:
+            if file.__contains__('.DS_Store'):
+                continue
             map = read_tabu_files('%s/%s' % (path, file))
             it1 = map.keys()
             for k1 in it1:
@@ -215,9 +217,8 @@ def  selectTheMinimalGatesFromFiles(path,name,exam):
             po.write('%s\n' % k)
             for i in range(len(res[key])):
                 # print('9999999 ', end=' ')
-                if i != 0 and i != 6 and i != 7:
-                    print('%s ' % res[key][i], end=' ')
-                    po.write('%s ' % res[key][i])
+                print('%s ' % res[key][i], end=' ')
+                po.write('%s ' % res[key][i])
             print()
             po.write('\n')
     po.flush()
@@ -1014,7 +1015,7 @@ def  comparesycamore(tsapath,fidlspath):
 if __name__ == '__main__':
     tsapath='results/qct/smallnumccaconnect_forw_3.00_delta_0.20000'
     fidlspath='E:\\github\\FiDLS-master\\FiDLS-master\\testRecord\\0924-sycamore_01y_top_B131_all__D_old_.txt'
-    comparesycamore(tsapath,fidlspath)
+    # comparesycamore(tsapath,fidlspath)
 
     if sys.argv[1].__eq__('best'):
         if sys.argv[2]!='':

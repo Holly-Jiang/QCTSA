@@ -221,11 +221,13 @@ class FileUtils:
         return ngates
 
     @classmethod
-    def compute_depth(self, currentlayers: list):
+    def compute_depth(self, currentlayers: list,system:str):
         layers = []
         ngates = 0
         result = FileResult()
         last_layer = [-1] * 20
+        if system.__eq__('sycamore'):
+            last_layer = [-1] * 53
         for i in range(len(currentlayers)):
             g = currentlayers[i]
             layer = 0
