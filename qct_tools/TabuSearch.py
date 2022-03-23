@@ -72,5 +72,5 @@ class TabuSearch:
         run, it = self.mustStop(currentIteration, bestSolution)
         if run and it < self.maxIterations:
             return bestSolution
-        print('iteration times %s'%it)
+        # print('iteration times %s'%it)
         return None
