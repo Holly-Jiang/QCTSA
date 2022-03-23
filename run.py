@@ -89,6 +89,7 @@ if len(sys.argv) == 11:
             print('the generated circuit directory: results/circuits/%s/' % sys.argv[4])
             print("**********************************************")
             if os.path.exists(outpath):
+                delta += float(sys.argv[9])
                 continue
             po = open(outpath, "w")
             print(forw, delta)
