@@ -60,7 +60,7 @@ def process(start,end, system):
             continue
         position=20
         if system.__eq__('sycamore'):
-            position=54
+            position=53
         gates = FileUtils.precessReadQasm(current_path, ss , position)
         # print('processing the %d-th file:%s, consisting of %d gates.' % (k, ss, gates))
         # if gates < 10000:

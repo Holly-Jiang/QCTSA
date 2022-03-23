@@ -44,7 +44,12 @@ class QCT:
                 if layers[d][s].control != -1:
                     currentLayers.append(layers[d][s])
                 else:
-                    all_gates.append(layers[d][s])
+                    g = Gate()
+                    g.control = layers[d][s].control
+                    g.type = layers[d][s].type
+                    g.angle = layers[d][s].angle
+                    g.target = locations[g.target]
+                    all_gates.append(g)
             nextlayers_1 = []
             lookNum = 1
             while lookNum <= forw:
