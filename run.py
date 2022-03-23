@@ -90,6 +90,7 @@ if len(sys.argv) == 11:
             print("**********************************************")
             if os.path.exists(outpath):
                 delta += float(sys.argv[9])
+                print('exist')
                 continue
             po = open(outpath, "w")
             print(forw, delta)
