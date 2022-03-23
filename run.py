@@ -88,6 +88,8 @@ if len(sys.argv) == 11:
             print('the output file: %s' % (outpath))
             print('the generated circuit directory: results/circuits/%s/' % sys.argv[4])
             print("**********************************************")
+            if os.path.exists(outpath):
+                continue
             po = open(outpath, "w")
             print(forw, delta)
             count = 0

@@ -89,7 +89,7 @@ def read_sabre_files(path):
         list1.append(float(arr[0]))
         list1.append(float(arr[1]))
         list1.append(float(arr[2]))
-        if float(arr[2])>3600:
+        if float(arr[2])>3600 and float(arr[2])!=9999999:
             print(str,line)
         map[str] = list1
     return map
