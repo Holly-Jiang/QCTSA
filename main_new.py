@@ -89,8 +89,8 @@ def read_sabre_files(path):
         list1.append(float(arr[0]))
         list1.append(float(arr[1]))
         list1.append(float(arr[2]))
-        if float(arr[2])>3600 and float(arr[2])!=9999999:
-            print(str,line)
+        # if float(arr[2])>3600 and float(arr[2])!=9999999:
+        #     print(str,line)
         map[str] = list1
     return map
 
@@ -149,8 +149,25 @@ def read_topgraph_files(path):
             map['%s' % str] = list1
     return map
 
-
 def selectTheBestResultFromFiles(path):
+    files = os.listdir(path)
+    mingatesum=999999999
+    mingatename=''
+    for file in files:
+        map = read_tabu_files('%s/%s'%(path,file))
+        gatesum = 0
+        it1 = map.keys()
+        # if len(it1)!=159:
+        #     continue
+        for k1 in it1:
+            gatesum += map.get(k1)[5]
+        if gatesum < mingatesum:
+            mingatesum = gatesum
+            mingatename=file
+        # print('%s %s %s %f'%(file,file[30:],file[19:23], math.log(gatesum,10)))
+        print('%s %d'%(file, gatesum))
+    print("the minimal file is [[%s]], consisting of [[%d]] gates. "%(mingatename,mingatesum))
+def selectTheBestResultFromDirs(path):
     files = os.listdir(path)
     mingatesum = 999999999
     mingatename = ''
@@ -283,7 +300,7 @@ def generateCharts(file):
     out=list()
     for k in it:
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' %k,20)
+        fileResult = fu.readQasm('data/%s.qasm' %k,53)
         l = fileResult.n2gates
         o1=list()
         if  mapu.get(k)[5]!=0:
@@ -312,11 +329,13 @@ def generateSabreCharts(file):
         fileResult = fu.readQasm('data/%s.qasm' %k, 20)
         l = fileResult.n2gates
         o1=list()
-        if  mapu.get(k)[1]!=0:
+        if mapu.get(k)[2] == 9999999:
+            continue
+        if  mapu.get(k)[2]!=0:
             # print('%s %s %s'%(k, mapu.get(k)[2],mapu.get(k)[5]))
             o1.append(k)
             o1.append(math.log10(l))
-            o1.append(math.log10(float(mapu.get(k)[1])))
+            o1.append(math.log10(float(mapu.get(k)[2])))
             out.append(o1)
             # print('%s %s %s'%(k, math.log10(l),math.log10(float(mapu.get(k)[5]))))
         else:
@@ -331,19 +350,19 @@ def generateSabreCharts(file):
 
 def generatefidslCharts(file):
     print('name ini num')
-    mapu = read_topgraph_files(file)
+    mapu = read_fidls_syc_files(file)
     it = mapu.keys()
     out=list()
     for k in it:
         fu = FileUtils()
-        fileResult = fu.readQasm('data/%s.qasm' %k, 20)
+        fileResult = fu.readQasm('data/%s.qasm' %k, 53)
         l = fileResult.n2gates
         o1=list()
-        if  mapu.get(k)[1]!=0:
+        if  mapu.get(k)[3]!=0:
             # print('%s %s %s'%(k, mapu.get(k)[2],mapu.get(k)[5]))
             o1.append(k)
             o1.append(math.log10(l))
-            o1.append(math.log10(float(mapu.get(k)[1]*3)))
+            o1.append(math.log10(float(mapu.get(k)[3])))
             out.append(o1)
             # print('%s %s %s'%(k, math.log10(l),math.log10(float(mapu.get(k)[5]))))
         else:
@@ -547,6 +566,51 @@ def caculateTheAdjustCCA():
     print("(FiDSL-TSA_cca)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
     print('average: %s' % (((optmgate - tsagate + 0.0) / optmgate+(sabregate - tsagate + 0.0) / sabregate  +(fidslgate - tsagate + 0.0) / fidslgate) / 3))
 
+
+def caculateTheAdjustCCA_QX20():
+    print('_________________________comparison of <*_TSA_cca_QX20>______________________')
+    fcca = "./results/data/cca/fidls_cca_q20"
+    fidslcca = read_tabu_files(fcca)
+    tcca = "./results/data/cca/tsa_cca"
+    tsacca = read_tabu_files(tcca)
+    occa = "./results/data/cca/ga_cca"
+    optmcca = read_tabu_files(occa)
+    sabrestr = "./results/data/cca/sabre_cca"
+    sabremap = read_tabu_files(sabrestr)
+    names = list()
+    it = tsacca.keys()
+    for k in it:
+        if fidslcca.get(k) == None:
+            names.append(k)
+        elif optmcca.get(k) == None:
+            names.append(k)
+        elif sabremap.get(k) == None:
+            names.append(k)
+    for i in range(len(names)):
+        del tsacca[names[i]]
+
+    tsagate = 0
+    optmgate = 0
+    fidslgate = 0
+    ori = 0
+    sabregate = 0
+    it = tsacca.keys()
+    for k in it:
+        tsagate += tsacca.get(k)[5]
+        fidsltsa = fidslcca.get(k)
+        fidslgate += fidsltsa[5]
+        optm = optmcca.get(k)
+        ori += tsacca.get(k)[2]
+        optmgate += optm[5]
+        sab = sabremap.get(k)
+        sabregate += sab[5]
+
+    print("number of case: ", len(tsacca), "ORI: ", ori, ", GA: ", optmgate, ", SABRE: ", sabregate,
+          ", FiDSL: ", fidslgate, ", TSA_cca: ", tsagate)
+    print("(GA-TSA_cca)/GA: ", (optmgate - tsagate + 0.0) / optmgate)
+    print("(SABRE-TSA_cca)/SABRE: ", (sabregate - tsagate + 0.0) / sabregate)
+    print("(FiDSL-TSA_cca)/FiDSL: ", (fidslgate - tsagate + 0.0) / fidslgate)
+    print('average: %s' % (((optmgate - tsagate + 0.0) / optmgate+(sabregate - tsagate + 0.0) / sabregate  +(fidslgate - tsagate + 0.0) / fidslgate) / 3))
 def caculateTheAdjustOptm():
     print('_________________________comparison of <*_GA>______________________')
     sabreoptm = "./results/data/optm/sabre_optm"
@@ -763,7 +827,7 @@ def caculateFiDSL_QX20():
     sabremap = read_sabre_files(sabrestr)
     count = 0
     tsamap = read_tabu_files("./results/data/tsa/fidls_tsa_q20")
-    ccamap = read_tabu_files("./results/data/cca/fidsl_cca")
+    ccamap = read_tabu_files("./results/data/cca/fidls_cca_q20")
     names = list()
     it = tsamap.keys()
     for k in it:
@@ -805,7 +869,7 @@ def caculateFiDSL_Sycamore():
     topgraph = "./results/data/fidls_sycamore/top_fidls"
     fidslmap = read_fidls_syc_files(topgraph)
     count = 0
-    tsamap = read_fidls_syc_files("./results/data/fidls_sycamore/tsa_fidls")
+    tsamap = read_tabu_files("./results/data/tsa_sycamore/fidls_tsa")
     # ccamap = read_tabu_files("./results/data/cca/fidsl_cca")
     names = list()
     it = tsamap.keys()
@@ -825,7 +889,7 @@ def caculateFiDSL_Sycamore():
     sabregate = 0
     it = tsamap.keys()
     for k in it:
-        tsagate += tsamap.get(k)[3]
+        tsagate += tsamap.get(k)[5]
         fidslgate += fidslmap.get(k)[3]
         ori += tsamap.get(k)[1]
         # ccagate += ccamap.get(k)[5]
@@ -1144,7 +1208,7 @@ def compareSABRE_TSA(sabrepath, tsapath, type):
         pub_res += 1
         gate_gql += v1
         gate_top += v2
-        tsatime += v1list[5]
+        tsatime += v1list[8]
         sabretime += sabremap.get(k)[2]
         if v1 < v2:
             greater_gql_top += 1
@@ -1164,12 +1228,13 @@ def compareSABRE_TSA(sabrepath, tsapath, type):
     print("number of case:  SABRE < TSA： ", greater_top_gql, ", TSA < SABRE： ", greater_gql_top, ", equal： ",
           eq_gql_top)
     print("(SABRE-TSA)/SABRE：", (gate_top - gate_gql + 0.0) / gate_top * 100, "% ")
-    # print('TSA time: %s' % tsatime)
+    print('TSA time: %s' % tsatime)
+    print('SABRE time: %s' % sabretime)
 
 
 def compareFiDSL_TSA(fidlspath, tsapath, type):
     print('fidls:%s  tsa:%s'%(fidlspath,tsapath))
-    fidslmap = read_topgraph_files(fidlspath)
+    fidslmap = read_fidls_syc_files(fidlspath)
     tsamap = read_tabu_files(tsapath)
     greater_top_gql = 0
     greater_gql_top = 0
@@ -1181,6 +1246,7 @@ def compareFiDSL_TSA(fidlspath, tsapath, type):
     pro_top_gql = 0
     pro_gql_top = 0
     tsatime = 0
+    fidlstime=0
     it = tsamap.keys()
     for k in it:
         v1list = tsamap.get(k)
@@ -1203,8 +1269,9 @@ def compareFiDSL_TSA(fidlspath, tsapath, type):
             continue
         # // 比较swap个数
         v1 = v1list[5]
-        tsatime += v1list[5]
-        v2 = fidslmap.get(k)[1] * 3
+        tsatime += v1list[8]
+        v2 = fidslmap.get(k)[3]
+        fidlstime+=fidslmap.get(k)[4]
         pub_res += 1
         gate_gql += v1
         gate_top += v2
@@ -1226,7 +1293,7 @@ def compareFiDSL_TSA(fidlspath, tsapath, type):
     print("number of case:  FiDSL < TSA： ", greater_top_gql, ", TSA < FiDSL： ", greater_gql_top, ", equal： ",
           eq_gql_top)
     print("(FiDSL-TSA)/FiDSL：", (gate_top - gate_gql + 0.0) / gate_top * 100, "% ")
-    print('TSA time: %s' % tsatime)
+    print('TSA time: %s   fidls time: %s' % (tsatime,fidlstime))
 
 
 def comparenumCCA_TSA(ccapath, tsapath, type='all'):
@@ -1267,8 +1334,8 @@ def comparenumCCA_TSA(ccapath, tsapath, type='all'):
         v1 = v1list[5]
         v2 = ccamap.get(k)[5]
         pub_res += 1
-        tsatime += v1list[5]
-        ccatime += ccamap.get(k)[5]
+        tsatime += v1list[8]
+        ccatime += ccamap.get(k)[8]
         gate_gql += v1
         gate_top += v2
         ori+=v1list[2]
@@ -1287,7 +1354,7 @@ def comparenumCCA_TSA(ccapath, tsapath, type='all'):
     print("number of case: TSA_cca < TSA_num： ", greater_top_gql, ", TSA_num < TSA_cca： ", greater_gql_top, ", equal： ",
           eq_gql_top)
     print("(TSA_cca-TSA_num)/TSA_cca：", (gate_top - gate_gql + 0.0) / gate_top * 100, "% ")
-    # print('TSA time: %s,  CCA time: %s' % (tsatime, ccatime))
+    print('TSA time: %s,  CCA time: %s' % (tsatime, ccatime))
     print('the original number of gates:%s'%ori)
 
 
@@ -1573,25 +1640,26 @@ if __name__ == '__main__':
     elif sys.argv[1].__eq__('ini'):
         caculateTheAdjustOptm()
         caculateTheAdjustSABRE()
-        caculateTheAdjustFiDSL()
+        # caculateTheAdjustFiDSL()
         caculateTheAdjustFiDSL_QX20()
-        caculateTheAdjustFiDSL_Sycamore()
-        caculateTheAdjustTSA()
+        # caculateTheAdjustFiDSL_Sycamore()
+        # caculateTheAdjustTSA()
         caculateTheAdjustTSA_QX20()
-        caculateTheAdjustTSA_sycamore()
-        caculateTheAdjustCCA()
+        # caculateTheAdjustTSA_sycamore()
+        # caculateTheAdjustCCA()
+        caculateTheAdjustCCA_QX20()
     elif sys.argv[1].__eq__('adj'):
         caculateOptm_()
         caculateSABRE_()
-        caculateFiDSL_()
+        # caculateFiDSL_()
         caculateFiDSL_QX20()
-        caculateFiDSL_Sycamore()
-        caculateTSA_()
+        # caculateFiDSL_Sycamore()
+        # caculateTSA_()
         caculateTSA_QX20()
-        caculateTSA_Sycamore()
+        # caculateTSA_Sycamore()
     elif sys.argv[1].__eq__('pairwise'):
         # paiwise type sabre fidsl tsa cca
-        # pairwise medium ./results/data/sabre/sabre ./results/data/fidsl/fidsl  ./results/data/tsa/tsa ./results/data/cca/tsa_cca  ./results/qct ./results/new/gatsa
+        # pairwise medium ./results/data/sabre/sabre ./results/data/fidls_sycamore/top_fidls  ./results/data/tsa_sycamore/tsa ./results/data/cca/tsa_cca
         #pairwise medium ./results/data/sabre/sabre ./results/data/fidsl/fidsl  ./results/new/tsa ./results/new/tsacca  ./results/qct ./results/new/gatsa
         print("--------------------SABRE VS TSA_num--------------------")
         compareSABRE_TSA(sys.argv[3], sys.argv[5], sys.argv[2])
@@ -1603,9 +1671,21 @@ if __name__ == '__main__':
         compareFiDSL_TSA(sys.argv[4], sys.argv[6], sys.argv[2])
         print("--------------------TSA_cca VS TSA_num--------------------")
         comparenumCCA_TSA(sys.argv[6], sys.argv[5], sys.argv[2])
+
+    elif sys.argv[1].__eq__('pairwisesycamore'):
+        # paiwise type sabre fidsl tsa cca
+        # pairwisesycamore all  ./results/data/fidls_sycamore/top_fidls  ./results/data/tsa_sycamore/fidls_tsa ./results/data/tsa_sycamore/fidls_cca   ./results/data/fidls_sycamore/tsa_fidls  ./results/data/tsa_sycamore/tsa ./results/data/tsa_sycamore/connect_cca
+        print("------------FiDLS as initial mapping---FiDSL VS TSA_num TSA_cca Sycamore------")
+        compareFiDSL_TSA(sys.argv[3], sys.argv[4], sys.argv[2])
+        compareFiDSL_TSA(sys.argv[3], sys.argv[5], sys.argv[2])
+        print("------------TSA as initial mapping---FiDSL VS TSA_num TSA_cca Sycamore---------")
+        compareFiDSL_TSA(sys.argv[6], sys.argv[7], sys.argv[2])
+        compareFiDSL_TSA(sys.argv[6], sys.argv[8], sys.argv[2])
+        print("-----------------------FiDSL VS TSA_num TSA_cca Sycamore-----------------------")
+        compareFiDSL_TSA(sys.argv[3], sys.argv[7], sys.argv[2])
     elif sys.argv[1].__eq__('evalnum'):
         # eval cca depth tsa
-        #evalnum  ./results/new/tsacca ./results/new/tsadepth   ./results/new/tsa
+        #evalnum  ./results/data/cca/tsa_cca ./results/data/tsa/tsa_depth   ./results/data/tsa/tsa
         print("--------------------TSA_cca VS TSA_num--------------------")
         comparenumCCA_TSA(sys.argv[2], sys.argv[4])
         print("--------------------TSA_depth VS TSA_num--------------------")
@@ -1638,7 +1718,8 @@ if __name__ == '__main__':
         print(len(files))
         generateForwDelta(files,names)
     elif sys.argv[1].__eq__('chart'):
-        generateGACharts(sys.argv[2])
+        # generatefidslCharts(sys.argv[2])
+        generateCharts(sys.argv[2])
     else:
         generateMaximal(sys.argv[1])
         print('please input the correct parameters')

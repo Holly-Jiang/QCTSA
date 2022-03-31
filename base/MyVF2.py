@@ -9,6 +9,7 @@ def connectAllocateRemaining(querygraph, targetgraph, mappingresult, mapping,sys
     for key, value in mappingresult.items():
         if max_count < value:
             max_count = value
+    keys=mappingresult.keys()
     for key, value in mappingresult.items():
         if max_count == value:
             mapkey = mapping[int(key)]

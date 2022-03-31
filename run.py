@@ -11,7 +11,7 @@ from qct_tools.utils.PathUtil import PathUtil
 
 if len(sys.argv) == 11:
     count = 0
-    path = 'processed_data/'
+    path = 'data/'
     files = os.listdir(path)
     position = 20
     if sys.argv[10].__eq__('sycamore'):
@@ -104,7 +104,7 @@ if len(sys.argv) == 11:
                 min_index = -1
                 min_time = 99999999
                 count += 1
-                current_path = 'processed_data/' + file_name
+                current_path = 'data/' + file_name
                 if os.path.isdir(current_path) or current_path.endswith('zip'):
                     continue
                 fu = FileUtils()

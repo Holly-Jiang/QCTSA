@@ -76,7 +76,7 @@ if len(sys.argv) == 7:
     min_index = -1
     min_time = 99999999
     count += 1
-    current_path = 'processed_data/' + filename+'.qasm'
+    current_path = 'data/' + filename+'.qasm'
     if os.path.isdir(current_path) or current_path.endswith('zip'):
         sys.exit('the path [%s] is valid!' % sys.argv[5])
     fu = FileUtils()
