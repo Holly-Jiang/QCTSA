@@ -84,6 +84,7 @@ def processingle(path,position):
 
 if __name__ == '__main__':
     if len(sys.argv) == 4:
-        start_index = int(sys.argv[1])
-        end_index = int(sys.argv[2])
-        process(start_index, end_index, sys.argv[3])
+        processingle("/Users/jiangqianxi/Desktop/github/TSA/tsa/src/main/resources/data/4_49_16.qasm",20)
+        # start_index = int(sys.argv[1])
+        # end_index = int(sys.argv[2])
+        # process(start_index, end_index, sys.argv[3])

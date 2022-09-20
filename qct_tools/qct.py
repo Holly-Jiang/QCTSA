@@ -46,6 +46,7 @@ class QCT:
                 else:
                     g = Gate()
                     g.control = layers[d][s].control
+                    g.target = layers[d][s].target
                     g.type = layers[d][s].type
                     g.angle = layers[d][s].angle
                     g.target = locations[g.target]

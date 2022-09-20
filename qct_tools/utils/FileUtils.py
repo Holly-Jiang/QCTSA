@@ -133,6 +133,7 @@ class FileUtils:
                 last_layer[g.target] = layer
                 last_layer[g.control] = layer
                 n2gates += 1
+                print(g.control,g.target)
             elif len(str) == 2:
                 if str[0].startswith('rz'):
                     angle = float(str[0][3:len(str[0]) - 1])
